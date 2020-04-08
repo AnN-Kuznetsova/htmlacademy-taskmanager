@@ -4,6 +4,7 @@ import {createBoardTemplate} from "./components/board.js";
 import {createTaskTemplate} from "./components/task.js";
 import {createTaskEditTemplate} from "./components/task-edit.js";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button.js";
+import {generateFilters} from "./mock/filter.js";
 
 
 const TASK_COUNT = 3;
@@ -18,7 +19,7 @@ const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 render(siteHeaderElement, createSiteMenuTemplate(), `beforeend`);
-render(siteMainElement, createFilterTemplate(), `beforeend`);
+render(siteMainElement, createFilterTemplate(generateFilters()), `beforeend`);
 render(siteMainElement, createBoardTemplate(), `beforeend`);
 
 const boardElement = siteMainElement.querySelector(`.board`);
