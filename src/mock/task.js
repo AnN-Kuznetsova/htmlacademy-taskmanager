@@ -1,11 +1,11 @@
 const generateTask = () => {
   return {
-    color: `pink`,
     description: `Example task with default color.`,
-    dueDate: new Date(),
+    dueDate: Math.random() > 0.5 ? new Date() : null,
     repeatingDays: null,
-    isArchive: true,
-    isFavorite: false
+    color: `pink`,
+    isArchive: Math.random() > 0.5,
+    isFavorite: Math.random() > 0.5
   };
 };
 
