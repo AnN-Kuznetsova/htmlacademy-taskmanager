@@ -1,3 +1,5 @@
+const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
+
 const MONTH_NAMES = [
   `January`,
   `February`,
@@ -14,4 +16,4 @@ const MONTH_NAMES = [
 ];
 
 
-export {MONTH_NAMES};
+export {MONTH_NAMES, DAYS};
