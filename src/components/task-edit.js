@@ -154,9 +154,8 @@ const createRepeatingDaysMarkup = () => {
 };
 
 const createTaskEditTemplate = (task) => {
-  const {} = task;
-  const color = `black`;
-  const description = `Example task with default color.`;
+  const {color, description, dueDate, repeatingDays} = task;
+
   const date = `23 September`;
   const time = `16:15`;
 
