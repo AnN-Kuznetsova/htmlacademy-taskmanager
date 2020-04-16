@@ -1,5 +1,5 @@
 import {createBoardTemplate} from "./components/board.js";
-import {createSortingTemplate} from "./components/sorting.js";
+import {createSortingTemplate} from "./components/sort.js";
 import {createFilterTemplate} from "./components/filter.js";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button.js";
 import {createSiteMenuTemplate} from "./components/site-menu.js";
