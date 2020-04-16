@@ -51,7 +51,7 @@ const renderBoard = (boardComponent, tasks) => {
     .forEach((task) => renderTask(taskListElement, task));
 
   const loadMoreButtonComponent = new LoadMoreButton();
-  render(boardComponent.getElement(), loadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
+  render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
 
   const onLoadMoreButtonClick = () => {
     const prevTasksCount = showingTasksCount;
@@ -66,7 +66,7 @@ const renderBoard = (boardComponent, tasks) => {
     }
   };
 
-  loadMoreButtonComponent.addEventListener(`click`, onLoadMoreButtonClick);
+  loadMoreButtonComponent.getElement().addEventListener(`click`, onLoadMoreButtonClick);
 };
 
 
@@ -77,32 +77,6 @@ const tasks = generateTasks(TASK_COUNT);
 render(siteHeaderElement, new SiteMenu().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new Filter(filters).getElement(), RenderPosition.BEFOREEND);
 
-/* ********************* */
-/* render(siteMainElement, createBoardTemplate(), `beforeend`);
-
-const boardElement = siteMainElement.querySelector(`.board`);
-const taskListElement = boardElement.querySelector(`.board__tasks`);
-
-render(boardElement, createSortingTemplate(), `afterbegin`);
-render(taskListElement, createTaskEditTemplate(tasks[0]), `beforeend`);
-
-let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-tasks.slice(1, showingTasksCount)
-  .forEach((task) => render(taskListElement, createTaskTemplate(task), `beforeend`));
-
-render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
-const loadMoreButton = boardElement.querySelector(`.load-more`);
-
-const onLoadMoreButtonClick = () => {
-  const prevTasksCount = showingTasksCount;
-  showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
-
-  tasks.slice(prevTasksCount, showingTasksCount)
-    .forEach((task) => render(taskListElement, createTaskTemplate(task), `beforeend`));
-
-  if (showingTasksCount >= tasks.length) {
-    loadMoreButton.remove();
-  }
-};
-
-loadMoreButton.addEventListener(`click`, onLoadMoreButtonClick); */
+const boardComponent = new Board();
+render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
+renderBoard(boardComponent, tasks);
