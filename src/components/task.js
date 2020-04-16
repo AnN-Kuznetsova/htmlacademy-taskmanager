@@ -66,7 +66,6 @@ const createTaskTemplate = (task) => {
 class Task {
   constructor(task) {
     this._task = task;
-
     this._element = null;
   }
 
@@ -88,4 +87,4 @@ class Task {
 }
 
 
-export {/* Task */createTaskTemplate};
+export {Task};
