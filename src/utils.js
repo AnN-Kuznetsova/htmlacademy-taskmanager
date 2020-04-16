@@ -8,5 +8,12 @@ const formatTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
 
-export {formatTime};
+  return newElement.firstChild;
+};
+
+
+export {formatTime, createElement};
