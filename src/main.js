@@ -1,4 +1,5 @@
 import {createBoardTemplate} from "./components/board.js";
+import {createSortingTemplate} from "./components/sorting.js";
 import {createFilterTemplate} from "./components/filter.js";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button.js";
 import {createSiteMenuTemplate} from "./components/site-menu.js";
@@ -31,6 +32,7 @@ render(siteMainElement, createBoardTemplate(), `beforeend`);
 const boardElement = siteMainElement.querySelector(`.board`);
 const taskListElement = boardElement.querySelector(`.board__tasks`);
 
+render(boardElement, createSortingTemplate(), `afterbegin`);
 render(taskListElement, createTaskEditTemplate(tasks[0]), `beforeend`);
 
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
