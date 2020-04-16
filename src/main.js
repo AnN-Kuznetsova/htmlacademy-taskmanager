@@ -4,9 +4,11 @@ import {createFilterTemplate} from "./components/filter.js";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button.js";
 import {createSiteMenuTemplate} from "./components/site-menu.js";
 import {createTaskTemplate} from "./components/task.js";
+import {createTasksTemplate} from "./tasks.js";
 import {createTaskEditTemplate} from "./components/task-edit.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
+import {render, RenderPosition} from "./utils.js";
 
 
 const TASK_COUNT = 22;
@@ -15,11 +17,6 @@ const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
 const filters = generateFilters();
 const tasks = generateTasks(TASK_COUNT);
-
-
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 
 const siteMainElement = document.querySelector(`.main`);
