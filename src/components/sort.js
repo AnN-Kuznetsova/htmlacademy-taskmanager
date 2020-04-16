@@ -10,7 +10,7 @@ const createSortingTemplate = () => {
   );
 };
 
-class Sorting {
+class Sort {
   constructor() {
     this._element = null;
   }
@@ -33,4 +33,4 @@ class Sorting {
 }
 
 
-export {Sorting};
+export {Sort};

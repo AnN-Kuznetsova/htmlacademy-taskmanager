@@ -1,5 +1,5 @@
 import {Board} from "./components/board.js";
-import {Sorting} from "./components/sort.js";
+import {Sort} from "./components/sort.js";
 import {Filter} from "./components/filter.js";
 import {LoadMoreButton} from "./components/load-more-button.js";
 import {SiteMenu} from "./components/site-menu.js";
@@ -40,7 +40,34 @@ const renderTask = (taskListElement, task) => {
 };
 
 
-const renderBoard = () => {};
+const renderBoard = (boardComponent, tasks) => {
+  render(boardComponent.getElement(), new Sort().getElement(), RenderPosition.BEFOREEND);
+  render(boardComponent.getElement(), new Tasks().getElement(), RenderPosition.BEFOREEND);
+
+  const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
+
+  let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+  tasks.slice(0, showingTasksCount)
+    .forEach((task) => renderTask(taskListElement, task));
+
+  const loadMoreButtonComponent = new LoadMoreButton();
+  render(boardComponent.getElement(), loadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
+
+  const onLoadMoreButtonClick = () => {
+    const prevTasksCount = showingTasksCount;
+    showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
+
+    tasks.slice(prevTasksCount, showingTasksCount)
+      .forEach((task) => renderTask(taskListElement, task));
+
+    if (showingTasksCount >= tasks.length) {
+      loadMoreButtonComponent.getElement().remove();
+      loadMoreButtonComponent.removeElement();
+    }
+  };
+
+  loadMoreButtonComponent.addEventListener(`click`, onLoadMoreButtonClick);
+};
 
 
 const filters = generateFilters();
