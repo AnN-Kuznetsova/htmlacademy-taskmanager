@@ -15,16 +15,24 @@ const TASK_COUNT = 22;
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
+const siteMainElement = document.querySelector(`.main`);
+const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
+
+
+const renderTask = () => {};
+
+const renderBoard = () => {};
+
+
 const filters = generateFilters();
 const tasks = generateTasks(TASK_COUNT);
 
 
-const siteMainElement = document.querySelector(`.main`);
-const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
+render(siteHeaderElement, new SiteMenu().getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new Filter(filters).getElement(), RenderPosition.BEFOREEND);
 
-render(siteHeaderElement, createSiteMenuTemplate(), `beforeend`);
-render(siteMainElement, createFilterTemplate(filters), `beforeend`);
-render(siteMainElement, createBoardTemplate(), `beforeend`);
+/* ********************* */
+/* render(siteMainElement, createBoardTemplate(), `beforeend`);
 
 const boardElement = siteMainElement.querySelector(`.board`);
 const taskListElement = boardElement.querySelector(`.board__tasks`);
@@ -51,4 +59,4 @@ const onLoadMoreButtonClick = () => {
   }
 };
 
-loadMoreButton.addEventListener(`click`, onLoadMoreButtonClick);
+loadMoreButton.addEventListener(`click`, onLoadMoreButtonClick); */
