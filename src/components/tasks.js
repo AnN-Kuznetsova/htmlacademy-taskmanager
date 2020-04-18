@@ -1,13 +1,13 @@
 import {createElement} from "../utils.js";
 
-export class Board {
+export class Tasks {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
     return (
-      `<section class="board container"></section>`
+      `<div class="board__tasks"></div>`
     );
   }
 

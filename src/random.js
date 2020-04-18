@@ -26,7 +26,7 @@ const getRandomDate = (minDateRange, maxDateRange) => {
 
 //  Функция генерирования случаного значения Boolean
 const generateBoolean = () => {
-  return !!(Math.random() > 0.5);
+  return Math.random() > 0.5;
 };
 
 
