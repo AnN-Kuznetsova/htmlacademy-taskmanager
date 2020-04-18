@@ -6,7 +6,7 @@ export class Filter {
     this._element = null;
   }
 
-  createFilterMarkup(filter, isChecked) {
+  _createFilterMarkup(filter, isChecked) {
     const {title, count} = filter;
 
     return (
@@ -25,7 +25,7 @@ export class Filter {
 
   getTemplate() {
     const filtersMarkup = this._filters
-      .map((it, i) => this.createFilterMarkup(it, i === 0))
+      .map((it, i) => this._createFilterMarkup(it, i === 0))
       .join(`\n`);
 
     return (
