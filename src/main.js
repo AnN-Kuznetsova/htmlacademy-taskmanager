@@ -6,6 +6,7 @@ import {SiteMenu} from "./components/site-menu.js";
 import {Task} from "./components/task.js";
 import {Tasks} from "./components/tasks.js";
 import {TaskEdit} from "./components/task-edit.js";
+import {NoTasks} from "./components/no-tasks.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
 import {render, RenderPosition} from "./utils.js";
@@ -20,12 +21,31 @@ const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 
 const renderTask = (taskListElement, task) => {
-  const onEditButtonClick = () => {
+  const replaceTaskToEdit = () => {
     taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
   };
 
-  const onEditFormSubmit = () => {
+  const replaceEditToTask = () => {
     taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      replaceEditToTask();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  const onEditButtonClick = () => {
+    replaceTaskToEdit();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  };
+
+  const onEditFormSubmit = () => {
+    replaceEditToTask();
+    document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
   const taskComponent = new Task(task);
@@ -41,6 +61,13 @@ const renderTask = (taskListElement, task) => {
 
 
 const renderBoard = (boardComponent, tasks) => {
+  const isAllTasksArchived = tasks.every((task) => task.isArchive);
+
+  if (isAllTasksArchived) {
+    render(boardComponent.getElement(), new NoTasks().getElement(), RenderPosition.BEFOREEND);
+    return;
+  }
+
   render(boardComponent.getElement(), new Sort().getElement(), RenderPosition.BEFOREEND);
   render(boardComponent.getElement(), new Tasks().getElement(), RenderPosition.BEFOREEND);
 
