@@ -9,7 +9,7 @@ import {TaskEdit} from "./components/task-edit.js";
 import {NoTasks} from "./components/no-tasks.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
-import {render, RenderPosition, replace} from "./utils/render.js";
+import {render, RenderPosition, replace, remove} from "./utils/render.js";
 
 
 const TASK_COUNT = 22;
@@ -88,7 +88,7 @@ const renderBoard = (boardComponent, tasks) => {
       .forEach((task) => renderTask(taskListElement, task));
 
     if (showingTasksCount >= tasks.length) {
-      loadMoreButtonComponent.getElement().remove();
+      remove(loadMoreButtonComponent.getElement());
       loadMoreButtonComponent.removeElement();
     }
   };
