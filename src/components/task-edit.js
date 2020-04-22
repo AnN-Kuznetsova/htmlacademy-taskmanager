@@ -153,4 +153,9 @@ export class TaskEdit extends AbstractComponent {
       </article>`
     );
   }
+
+  setOnEditFormSubmit(cb) {
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, cb);
+  }
 }

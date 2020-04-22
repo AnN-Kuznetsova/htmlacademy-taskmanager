@@ -70,4 +70,9 @@ export class Task extends AbstractComponent {
       </article>`
     );
   }
+
+  setOnEditButtonClick(cb) {
+    this.getElement().querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, cb);
+  }
 }
