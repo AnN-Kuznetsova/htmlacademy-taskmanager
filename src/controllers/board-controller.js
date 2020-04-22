@@ -58,6 +58,12 @@ export class BoardController {
     this._loadMoreButtonComponent = new LoadMoreButton();
   }
 
+  _renderTasks(taskListElement, tasks) {
+    tasks.forEach((task) => {
+      renderTask(taskListElement, task);
+    });
+  }
+
   render(tasks) {
     const boardElement = this._boardComponent.getElement();
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
@@ -73,8 +79,7 @@ export class BoardController {
     const taskListElement = boardElement.querySelector(`.board__tasks`);
 
     let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-    tasks.slice(0, showingTasksCount)
-      .forEach((task) => renderTask(taskListElement, task));
+    this._renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
 
     render(boardElement, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
@@ -82,8 +87,7 @@ export class BoardController {
       const prevTasksCount = showingTasksCount;
       showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
 
-      tasks.slice(prevTasksCount, showingTasksCount)
-        .forEach((task) => renderTask(taskListElement, task));
+      this._renderTasks(taskListElement, tasks.slice(prevTasksCount, showingTasksCount));
 
       if (showingTasksCount >= tasks.length) {
         remove(this._loadMoreButtonComponent);
