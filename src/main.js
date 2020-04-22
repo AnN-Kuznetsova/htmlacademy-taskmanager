@@ -22,11 +22,11 @@ const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 const renderTask = (taskListElement, task) => {
   const replaceTaskToEdit = () => {
-    replace(taskListElement, taskEditComponent.getElement(), taskComponent.getElement());
+    replace(taskEditComponent, taskComponent);
   };
 
   const replaceEditToTask = () => {
-    replace(taskListElement, taskComponent.getElement(), taskEditComponent.getElement());
+    replace(taskComponent, taskEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
