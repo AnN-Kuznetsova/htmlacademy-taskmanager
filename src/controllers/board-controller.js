@@ -10,44 +10,6 @@ import {render, RenderPosition, replace, remove} from "../utils/render.js";
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-const renderTask = (taskListElement, task) => {
-  const replaceTaskToEdit = () => {
-    replace(taskEditComponent, taskComponent);
-  };
-
-  const replaceEditToTask = () => {
-    replace(taskComponent, taskEditComponent);
-  };
-
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      replaceEditToTask();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const onEditButtonClick = () => {
-    replaceTaskToEdit();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  };
-
-  const onEditFormSubmit = () => {
-    replaceEditToTask();
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  };
-
-  const taskComponent = new Task(task);
-  taskComponent.setOnEditButtonClick(onEditButtonClick);
-
-  const taskEditComponent = new TaskEdit(task);
-  taskEditComponent.setOnEditFormSubmit(onEditFormSubmit);
-
-  render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
-};
-
-
 export class BoardController {
   constructor(boardComponent) {
     this._boardComponent = boardComponent;
@@ -58,11 +20,51 @@ export class BoardController {
     this._loadMoreButtonComponent = new LoadMoreButton();
   }
 
+
+  _renderTask(taskListElement, task) {
+    const replaceTaskToEdit = () => {
+      replace(taskEditComponent, taskComponent);
+    };
+
+    const replaceEditToTask = () => {
+      replace(taskComponent, taskEditComponent);
+    };
+
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        replaceEditToTask();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
+    const onEditButtonClick = () => {
+      replaceTaskToEdit();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    };
+
+    const onEditFormSubmit = () => {
+      replaceEditToTask();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    };
+
+    const taskComponent = new Task(task);
+    taskComponent.setOnEditButtonClick(onEditButtonClick);
+
+    const taskEditComponent = new TaskEdit(task);
+    taskEditComponent.setOnEditFormSubmit(onEditFormSubmit);
+
+    render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
+  }
+
+
   _renderTasks(taskListElement, tasks) {
     tasks.forEach((task) => {
-      renderTask(taskListElement, task);
+      this._renderTask(taskListElement, task);
     });
   }
+
 
   render(tasks) {
     const boardElement = this._boardComponent.getElement();
