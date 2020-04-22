@@ -92,7 +92,7 @@ const renderBoard = (boardComponent, tasks) => {
     }
   };
 
-  loadMoreButtonComponent.getElement().addEventListener(`click`, onLoadMoreButtonClick);
+  loadMoreButtonComponent.setOnLoadMoreButtonClick(onLoadMoreButtonClick);
 };
 
 
