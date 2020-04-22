@@ -1,4 +1,4 @@
-import {randomNumber} from "../random.js";
+import {randomNumber} from "../utils/random.js";
 
 const FILTER_NAMES = [`all`, `overdue`, `today`, `favorites`, `repeating`, `archive`];
 const FILTERED_VALUES_MAX_COUNT = 10;

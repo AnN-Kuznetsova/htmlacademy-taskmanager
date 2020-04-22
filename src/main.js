@@ -9,7 +9,7 @@ import {TaskEdit} from "./components/task-edit.js";
 import {NoTasks} from "./components/no-tasks.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
-import {render, RenderPosition} from "./utils.js";
+import {render, RenderPosition} from "./utils/render.js";
 
 
 const TASK_COUNT = 22;
