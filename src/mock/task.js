@@ -1,5 +1,5 @@
 import {COLORS} from "../const.js";
-import {getRandomArrayElement, getRandomDate, generateBoolean} from "../random.js";
+import {getRandomArrayElement, getRandomDate, generateBoolean} from "../utils/random.js";
 
 const MIN_DATE_RANGE = 0;
 const MAX_DATE_RANGE = 8;
