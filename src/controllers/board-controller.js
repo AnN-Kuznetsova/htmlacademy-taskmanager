@@ -106,6 +106,13 @@ export default class BoardController {
 
     renderLoadMoreButton();
 
-    this._sortComponent.setOnSortTypeChange(() => {});
+    const onSortTypeChange = () => {
+      showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+      taskListElement.innerHTML = ``;
+      this._renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
+      renderLoadMoreButton();
+    };
+
+    this._sortComponent.setOnSortTypeChange(onSortTypeChange);
   }
 }
