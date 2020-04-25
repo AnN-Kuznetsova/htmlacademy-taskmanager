@@ -72,21 +72,22 @@ export default class BoardController {
 
 
   _renderLoadMoreButton() {
-    const showingTasks = this._showingTasks;
+    const boardElement = this._boardComponent.getElement();
 
-    if (this._showingTasksCount >= showingTasks.length) {
+    if ((this._showingTasksCount >= this._showingTasks.length)
+      || (boardElement.contains(this._loadMoreButtonComponent.getElement()))) {
       return;
     }
 
-    render(this._boardComponent.getElement(), this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    render(boardElement, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
     const onLoadMoreButtonClick = () => {
       const prevTasksCount = this._showingTasksCount;
       this._showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
 
-      this._renderTasks(showingTasks.slice(prevTasksCount, this._showingTasksCount));
+      this._renderTasks(this._showingTasks.slice(prevTasksCount, this._showingTasksCount));
 
-      if (this._showingTasksCount >= showingTasks.length) {
+      if (this._showingTasksCount >= this._showingTasks.length) {
         remove(this._loadMoreButtonComponent);
       }
     };
