@@ -15,7 +15,7 @@ export default class BoardController {
     this._boardComponent = boardComponent;
 
     this._noTasksComponent = new NoTasks();
-    this._SortComponent = new Sort();
+    this._sortComponent = new Sort();
     this._tasksComponent = new Tasks();
     this._loadMoreButtonComponent = new LoadMoreButton();
   }
@@ -75,7 +75,7 @@ export default class BoardController {
       return;
     }
 
-    render(boardElement, this._SortComponent, RenderPosition.BEFOREEND);
+    render(boardElement, this._sortComponent, RenderPosition.BEFOREEND);
     render(boardElement, this._tasksComponent, RenderPosition.BEFOREEND);
 
     const taskListElement = boardElement.querySelector(`.board__tasks`);
@@ -97,5 +97,7 @@ export default class BoardController {
     };
 
     this._loadMoreButtonComponent.setOnLoadMoreButtonClick(onLoadMoreButtonClick);
+
+    this._sortComponent.setOnSortTypeChange(() => {});
   }
 }
