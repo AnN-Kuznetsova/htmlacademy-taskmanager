@@ -11,4 +11,12 @@ export default class Sort extends AbstractComponent {
       </div>`
     );
   }
+
+  getSortType() {
+
+  }
+
+  setOnSortTypeChange() {
+
+  }
 }
