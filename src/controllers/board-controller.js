@@ -1,16 +1,16 @@
-import {Sort} from "../components/sort.js";
-import {LoadMoreButton} from "../components/load-more-button.js";
-import {Task} from "../components/task.js";
-import {Tasks} from "../components/tasks.js";
-import {TaskEdit} from "../components/task-edit.js";
-import {NoTasks} from "../components/no-tasks.js";
+import Sort from "../components/sort.js";
+import LoadMoreButton from "../components/load-more-button.js";
+import Task from "../components/task.js";
+import Tasks from "../components/tasks.js";
+import TaskEdit from "../components/task-edit.js";
+import NoTasks from "../components/no-tasks.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-export class BoardController {
+export default class BoardController {
   constructor(boardComponent) {
     this._boardComponent = boardComponent;
 

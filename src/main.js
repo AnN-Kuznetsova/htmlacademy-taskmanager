@@ -1,10 +1,10 @@
-import {Board} from "./components/board.js";
-import {Filter} from "./components/filter.js";
-import {SiteMenu} from "./components/site-menu.js";
+import Board from "./components/board.js";
+import Filter from "./components/filter.js";
+import SiteMenu from "./components/site-menu.js";
+import BoardController from "./controllers/board-controller.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
 import {render, RenderPosition} from "./utils/render.js";
-import {BoardController} from "./controllers/board-controller.js";
 
 
 const TASK_COUNT = 22;
