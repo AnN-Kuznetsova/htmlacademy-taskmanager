@@ -47,4 +47,25 @@ export default class Sort extends AbstractComponent {
 
     this.getElement().addEventListener(`click`, onSortTypeButtonClick);
   }
+
+  getSortedTasks(tasks, from, to) {
+    const sortType = this._currentSortType;
+    let sortedTasks = [];
+    const showingTasks = tasks.slice();
+
+    switch (sortType) {
+      case SortType.DATE_UP:
+        sortedTasks = showingTasks.sort((a, b) => a.dueDate - b.dueDate);
+        break;
+      case SortType.DATE_DOWN:
+        sortedTasks = showingTasks.sort((a, b) => b.dueDate - a.dueDate);
+        break;
+      case SortType.DEFAULT:
+        sortedTasks = showingTasks;
+        break;
+      default:
+    }
+
+    return sortedTasks.slice(from, to);
+  }
 }
