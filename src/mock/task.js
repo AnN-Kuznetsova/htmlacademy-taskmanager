@@ -4,6 +4,8 @@ import {getRandomArrayElement, getRandomDate, generateBoolean} from "../utils/ra
 const MIN_DATE_RANGE = 0;
 const MAX_DATE_RANGE = 8;
 
+let index = 0;
+
 const DESCRIPTION_ITEMS = [
   `Изучить теорию`,
   `Сделать домашку`,
@@ -32,7 +34,7 @@ const generateTask = () => {
   const dueDate = generateBoolean() ? getRandomDate(MIN_DATE_RANGE, MAX_DATE_RANGE) : null;
 
   return {
-    description: getRandomArrayElement(DESCRIPTION_ITEMS),
+    description: `${++index}  ${getRandomArrayElement(DESCRIPTION_ITEMS)}`,
     dueDate,
     repeatingDays: dueDate ? DEFAULT_REPEATING_DAYS : generateRepeatingDays(),
     color: getRandomArrayElement(COLORS),
