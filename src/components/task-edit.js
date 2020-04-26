@@ -1,8 +1,8 @@
-import {AbstractComponent} from "./abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 import {MONTH_NAMES, DAYS, COLORS} from "../const.js";
 import {formatTime} from "../utils/common.js";
 
-export class TaskEdit extends AbstractComponent {
+export default class TaskEdit extends AbstractComponent {
   constructor(task) {
     super();
 

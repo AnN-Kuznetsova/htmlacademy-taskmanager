@@ -1,6 +1,6 @@
-import {AbstractComponent} from "./abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
-export class Tasks extends AbstractComponent {
+export default class Tasks extends AbstractComponent {
 
   getTemplate() {
     return (
