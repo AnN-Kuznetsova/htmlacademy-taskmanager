@@ -22,12 +22,16 @@ export default class BoardController {
     this._showingTasks = [];
     this._showingTaskControllers = [];
     this._showingTasksCount = 0;
+
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
   }
 
 
-  _renderTasks(tasks) {
+  _renderTasks(tasks, onDataChange) {
     const newTaskControllers = tasks.map((task) => {
-      const taskController = new TaskController(this._tasksComponent.getElement());
+      const taskController = new TaskController(this._tasksComponent.getElement(), onDataChange);
 
       taskController.render(task);
 
@@ -52,7 +56,7 @@ export default class BoardController {
       const prevTasksCount = this._showingTasksCount;
       this._showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
 
-      this._renderTasks(this._showingTasks.slice(prevTasksCount, this._showingTasksCount));
+      this._renderTasks(this._showingTasks.slice(prevTasksCount, this._showingTasksCount), this._onDataChange);
 
       if (this._showingTasksCount >= this._showingTasks.length) {
         remove(this._loadMoreButtonComponent);
@@ -66,8 +70,20 @@ export default class BoardController {
   _renderTaskList() {
     this._tasksComponent.getElement().innerHTML = ``;
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-    this._renderTasks(this._showingTasks.slice(0, this._showingTasksCount));
+    this._renderTasks(this._showingTasks.slice(0, this._showingTasksCount), this._onDataChange);
     this._renderLoadMoreButton();
+  }
+
+
+  _onDataChange(taskController, oldData, newData) {
+    const index = this._tasks.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
+    taskController.render(this._tasks[index]);
   }
 
 
@@ -94,7 +110,5 @@ export default class BoardController {
     render(boardElement, this._tasksComponent, RenderPosition.BEFOREEND);
 
     this._renderTaskList();
-
-    this._sortComponent.setOnSortTypeChange(this._onSortTypeChange.bind(this));
   }
 }
