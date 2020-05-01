@@ -1,13 +1,17 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {MONTH_NAMES, DAYS, COLORS} from "../const.js";
 import {formatTime} from "../utils/common.js";
 
-export default class TaskEdit extends AbstractComponent {
+export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
 
     this._task = task;
+    this._submitCallback = null;
+
+    this._subscribeOnEvents();
   }
+
 
   _createColorsMarkup(colors, currentColor) {
     return (
@@ -40,6 +44,7 @@ export default class TaskEdit extends AbstractComponent {
     );
   }
 
+
   _createRepeatingDaysMarkup(days, repeatingDays) {
     return (
       `<fieldset class="card__repeat-days">
@@ -68,6 +73,37 @@ export default class TaskEdit extends AbstractComponent {
       </fieldset>`
     );
   }
+
+
+  //_onCardDateDeadlineToggle() {}
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.card__date-deadline-toggle`)
+      .addEventListener(`click`, () => {
+        this._isDateShowing = !this._isDateShowing;
+
+        this.rerender();
+      });
+
+    element.querySelector(`.card__repeat-toggle`)
+      .addEventListener(`click`, () => {
+        this._isRepeatingTask = !this._isRepeatingTask;
+
+        this.rerender();
+      });
+
+    const repeatDays = element.querySelector(`.card__repeat-days`);
+    if (repeatDays) {
+      repeatDays.addEventListener(`change`, (evt) => {
+        this._activeRepeatingDays[evt.target.value] = evt.target.checked;
+
+        this.rerender();
+      });
+    }
+  }
+
 
   getTemplate() {
     const {color, description, dueDate, repeatingDays} = this._task;
@@ -154,8 +190,22 @@ export default class TaskEdit extends AbstractComponent {
     );
   }
 
+
+  recoveryListeners() {
+    this.setOnEditFormSubmit(this._submitCallback);
+    this._subscribeOnEvents();
+  }
+
+
+  rerender() {
+    super.rerender();
+  }
+
+
   setOnEditFormSubmit(cb) {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, cb);
+
+    this._submitCallback = cb;
   }
 }
