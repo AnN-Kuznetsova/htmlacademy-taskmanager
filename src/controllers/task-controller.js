@@ -48,10 +48,10 @@ export default class TaskController {
 
   render(task) {
     this._taskComponent = new Task(task);
-    this._taskComponent.setOnEditButtonClick(this._onEditButtonClick);
+    this._taskComponent.setOnEditButtonClick(this._onEditButtonClick.bind(this));
 
     this._taskEditComponent = new TaskEdit(task);
-    this._taskEditComponent.setOnEditFormSubmit(this._onEditFormSubmit);
+    this._taskEditComponent.setOnEditFormSubmit(this._onEditFormSubmit.bind(this));
 
     render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
   }
