@@ -10,11 +10,6 @@ export default class Task extends AbstractComponent {
   }
 
 
-  get task() {
-    return this._task;
-  }
-
-
   _createButtonMarkup(name, isActive = true) {
     return (
       `<button type="button"

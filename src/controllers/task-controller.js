@@ -8,6 +8,7 @@ export default class TaskController {
     this._container = container;
     this._onDataChange = onDataChange;
 
+    this._task = null;
     this._taskComponent = null;
     this._taskEditComponent = null;
 
@@ -42,14 +43,12 @@ export default class TaskController {
 
 
   _onArchiveButtonClick() {
-    const task = this._taskComponent.task;
-    this._onDataChange(this, task, Object.assign({}, task, {isArchive: !task.isArchive}));
+    this._onDataChange(this, this._task, Object.assign({}, this._task, {isArchive: !this._task.isArchive}));
   }
 
 
   _onFavoritesButtonClick() {
-    const task = this._taskComponent.task;
-    this._onDataChange(this, task, Object.assign({}, task, {isFavorite: !task.isFavorite}));
+    this._onDataChange(this, this._task, Object.assign({}, this._task, {isFavorite: !this._task.isFavorite}));
   }
 
 
@@ -60,12 +59,13 @@ export default class TaskController {
 
 
   render(task) {
-    this._taskComponent = new Task(task);
+    this._task = task;
+    this._taskComponent = new Task(this._task);
     this._taskComponent.setOnEditButtonClick(this._onEditButtonClick.bind(this));
     this._taskComponent.setOnArchiveButtonClick(this._onArchiveButtonClick.bind(this));
     this._taskComponent.setOnFavoritesButtonClick(this._onFavoritesButtonClick.bind(this));
 
-    this._taskEditComponent = new TaskEdit(task);
+    this._taskEditComponent = new TaskEdit(this._task);
     this._taskEditComponent.setOnEditFormSubmit(this._onEditFormSubmit.bind(this));
 
     render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
