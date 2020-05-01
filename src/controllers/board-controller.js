@@ -20,14 +20,21 @@ export default class BoardController {
 
     this._tasks = [];
     this._showingTasks = [];
+    this._showingTaskControllers = [];
     this._showingTasksCount = 0;
   }
 
 
   _renderTasks(tasks) {
-    tasks.forEach((task) => {
-      this._renderTask(task);
+    const newTaskControllers = tasks.map((task) => {
+      const taskController = new TaskController(this._tasksComponent.getElement());
+
+      taskController.render(task);
+
+      return taskController;
     });
+
+    this._showingTaskControllers = this._showingTaskControllers.concat(newTaskControllers);
   }
 
 
@@ -65,6 +72,7 @@ export default class BoardController {
 
 
   _onSortTypeChange() {
+    this._showingTaskControllers = [];
     this._showingTasks = this._sortComponent.getSortedTasks(this._tasks);
     this._renderTaskList();
   }
@@ -87,6 +95,6 @@ export default class BoardController {
 
     this._renderTaskList();
 
-    this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
+    this._sortComponent.setOnSortTypeChange(this._onSortTypeChange.bind(this));
   }
 }
