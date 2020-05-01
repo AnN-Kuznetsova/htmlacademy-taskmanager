@@ -40,6 +40,16 @@ export default class TaskController {
   }
 
 
+  _onArchiveButtonClick() {
+
+  }
+
+
+  _onFavoritesButtonClick() {
+
+  }
+
+
   _onEditFormSubmit() {
     this._replaceEditToTask();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
@@ -49,6 +59,8 @@ export default class TaskController {
   render(task) {
     this._taskComponent = new Task(task);
     this._taskComponent.setOnEditButtonClick(this._onEditButtonClick.bind(this));
+    this._taskComponent.setOnArchiveButtonClick(this._onArchiveButtonClick.bind(this));
+    this._taskComponent.setOnFavoritesButtonClick(this._onFavoritesButtonClick.bind(this));
 
     this._taskEditComponent = new TaskEdit(task);
     this._taskEditComponent.setOnEditFormSubmit(this._onEditFormSubmit.bind(this));
