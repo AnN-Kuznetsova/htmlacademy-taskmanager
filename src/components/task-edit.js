@@ -110,6 +110,12 @@ export default class TaskEdit extends AbstractSmartComponent {
         this.rerender();
       });
     }
+
+    element.querySelector(`.card__colors-wrap`)
+      .addEventListener(`change`, (evt) => {
+        this._task.color = evt.target.value;
+        this.rerender();
+      });
   }
 
 
