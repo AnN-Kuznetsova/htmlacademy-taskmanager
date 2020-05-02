@@ -3,10 +3,18 @@ import TaskEdit from "../components/task-edit.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
 
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
+
 export default class TaskController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
 
     this._task = null;
     this._taskComponent = null;
@@ -17,12 +25,17 @@ export default class TaskController {
 
 
   _replaceTaskToEdit() {
+    this._onViewChange();
     replace(this._taskEditComponent, this._taskComponent);
+    this._mode = Mode.EDIT;
   }
 
 
   _replaceEditToTask() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._taskEditComponent.reset();
     replace(this._taskComponent, this._taskEditComponent);
+    this._mode = Mode.DEFAULT;
   }
 
 
@@ -31,7 +44,6 @@ export default class TaskController {
 
     if (isEscKey) {
       this._replaceEditToTask();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 
@@ -54,11 +66,13 @@ export default class TaskController {
 
   _onEditFormSubmit() {
     this._replaceEditToTask();
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
 
   render(task) {
+    const oldTaskComponent = this._taskComponent;
+    const oldTaskEditComponent = this._taskEditComponent;
+
     this._task = task;
     this._taskComponent = new Task(this._task);
     this._taskComponent.setOnEditButtonClick(this._onEditButtonClick.bind(this));
@@ -68,6 +82,17 @@ export default class TaskController {
     this._taskEditComponent = new TaskEdit(this._task);
     this._taskEditComponent.setOnEditFormSubmit(this._onEditFormSubmit.bind(this));
 
-    render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
+    if (oldTaskEditComponent && oldTaskComponent) {
+      replace(this._taskComponent, oldTaskComponent);
+      replace(this._taskEditComponent, oldTaskEditComponent);
+    } else {
+      render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
+    }
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToTask();
+    }
   }
 }

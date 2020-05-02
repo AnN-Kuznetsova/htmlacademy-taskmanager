@@ -24,14 +24,15 @@ export default class BoardController {
     this._showingTasksCount = 0;
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
   }
 
 
-  _renderTasks(tasks, onDataChange) {
+  _renderTasks(tasks, onDataChange, onViewChange) {
     const newTaskControllers = tasks.map((task) => {
-      const taskController = new TaskController(this._tasksComponent.getElement(), onDataChange);
+      const taskController = new TaskController(this._tasksComponent.getElement(), onDataChange, onViewChange);
 
       taskController.render(task);
 
@@ -56,7 +57,7 @@ export default class BoardController {
       const prevTasksCount = this._showingTasksCount;
       this._showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
 
-      this._renderTasks(this._showingTasks.slice(prevTasksCount, this._showingTasksCount), this._onDataChange);
+      this._renderTasks(this._showingTasks.slice(prevTasksCount, this._showingTasksCount), this._onDataChange, this._onViewChange);
 
       if (this._showingTasksCount >= this._showingTasks.length) {
         remove(this._loadMoreButtonComponent);
@@ -70,7 +71,7 @@ export default class BoardController {
   _renderTaskList() {
     this._tasksComponent.getElement().innerHTML = ``;
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-    this._renderTasks(this._showingTasks.slice(0, this._showingTasksCount), this._onDataChange);
+    this._renderTasks(this._showingTasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
     this._renderLoadMoreButton();
   }
 
@@ -84,6 +85,11 @@ export default class BoardController {
 
     this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
     taskController.render(this._tasks[index]);
+  }
+
+
+  _onViewChange() {
+    this._showingTaskControllers.forEach((it) => it.setDefaultView());
   }
 
 
