@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {MONTH_NAMES} from "../const.js";
-import {formatTime} from "../utils/common.js";
+import {formatDate, formatTime} from "../utils/common.js";
 
 export default class Task extends AbstractComponent {
   constructor(task) {
@@ -26,7 +25,7 @@ export default class Task extends AbstractComponent {
     const isExpired = dueDate instanceof Date && dueDate < Date.now();
     const isDateShowing = !!dueDate;
 
-    const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+    const date = isDateShowing ? formatDate(dueDate) : ``;
     const time = isDateShowing ? formatTime(dueDate) : ``;
 
 

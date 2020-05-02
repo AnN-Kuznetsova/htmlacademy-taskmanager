@@ -1,15 +1,23 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {MONTH_NAMES, DAYS, COLORS} from "../const.js";
-import {formatTime} from "../utils/common.js";
+import {DAYS, COLORS} from "../const.js";
+import {formatDate, formatTime} from "../utils/common.js";
 
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
 
     this._task = task;
+    this._isDateShowing = !!task.dueDate;
+    this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
+    this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+
     this._submitCallback = null;
 
     this._subscribeOnEvents();
+  }
+
+  _isRepeating(repeatingDays) {
+    return Object.values(repeatingDays).some(Boolean);
   }
 
 
@@ -106,19 +114,21 @@ export default class TaskEdit extends AbstractSmartComponent {
 
 
   getTemplate() {
-    const {color, description, dueDate, repeatingDays} = this._task;
+    const {color, description, dueDate} = this._task;
+    const [isDateShowing, isRepeatingTask, activeRepeatingDays] =
+      [this._isDateShowing, this._isRepeatingTask, this._activeRepeatingDays];
 
     const isExpired = dueDate instanceof Date && dueDate < Date.now();
-    const isDateShowing = !!dueDate;
+    const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
+      (isRepeatingTask && !this._isRepeating(activeRepeatingDays));
 
-    const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
-    const time = isDateShowing ? formatTime(dueDate) : ``;
+    const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
+    const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
 
-    const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
     const repeatClass = isRepeatingTask ? `card--repeat` : ``;
     const deadlineClass = isExpired ? `card--deadline` : ``;
 
-    const repeatingDaysMarkup = this._createRepeatingDaysMarkup(DAYS, repeatingDays);
+    const repeatingDaysMarkup = this._createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
     const colorsMarkup = this._createColorsMarkup(COLORS, color);
 
     return (
@@ -181,7 +191,7 @@ export default class TaskEdit extends AbstractSmartComponent {
             </div>
 
             <div class="card__status-btns">
-              <button class="card__save" type="submit">save</button>
+              <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
               <button class="card__delete" type="button">delete</button>
             </div>
           </div>
