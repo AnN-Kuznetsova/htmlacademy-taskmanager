@@ -16,6 +16,7 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
+
   _isRepeating(repeatingDays) {
     return Object.values(repeatingDays).some(Boolean);
   }
@@ -91,9 +92,18 @@ export default class TaskEdit extends AbstractSmartComponent {
     element.querySelector(`.card__date-deadline-toggle`)
       .addEventListener(`click`, () => {
         this._isDateShowing = !this._isDateShowing;
-
+        this._task.dueDate = null;
         this.rerender();
+
+        if (this._isDateShowing) {
+          this.getElement().querySelector(`.card__date`)
+            .addEventListener(`input`, (evt) => {
+              this._task.dueDate = evt.target.value;
+              this.rerender();
+            });
+        }
       });
+
 
     element.querySelector(`.card__repeat-toggle`)
       .addEventListener(`click`, () => {
@@ -126,7 +136,8 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     const isExpired = dueDate instanceof Date && dueDate < Date.now();
     const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
-      (isRepeatingTask && !this._isRepeating(activeRepeatingDays));
+      (isRepeatingTask && !this._isRepeating(activeRepeatingDays)) ||
+      (isDateShowing && !dueDate);
 
     const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
     const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
@@ -210,11 +221,6 @@ export default class TaskEdit extends AbstractSmartComponent {
   recoveryListeners() {
     this.setOnEditFormSubmit(this._submitCallback);
     this._subscribeOnEvents();
-  }
-
-
-  rerender() {
-    super.rerender();
   }
 
 
