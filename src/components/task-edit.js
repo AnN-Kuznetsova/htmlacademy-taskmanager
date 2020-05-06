@@ -96,20 +96,11 @@ export default class TaskEdit extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    /* const cardDate = element.querySelector(`.card__date`);
-    if (cardDate) {
-      cardDate.addEventListener(`change`, (evt) => {
-        this._dueDate = evt.target.value;
-        this.rerender();
-      });
-    } */
-
     element.querySelector(`.card__date-deadline-toggle`)
       .addEventListener(`click`, () => {
         this._isDateShowing = !this._isDateShowing;
         this.rerender();
       });
-
 
     element.querySelector(`.card__repeat-toggle`)
       .addEventListener(`click`, () => {
@@ -151,7 +142,15 @@ export default class TaskEdit extends AbstractSmartComponent {
       this._flatpickr = flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
-        defaultDate: this._task.dueDate || `today`,
+        defaultDate: this._dueDate || `today`,
+      });
+
+      if (!this._dueDate) {
+        this._dueDate = this._flatpickr.selectedDates;
+      }
+
+      this._flatpickr.config.onChange.push((selectedDates) => {
+        this._dueDate = selectedDates;
       });
     }
   }
@@ -168,8 +167,6 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
     const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
-    /* const date = (isDateShowing && dueDate) ? dueDate : ``;
-    const time = ``; */
 
     const repeatClass = isRepeatingTask ? `card--repeat` : ``;
     const deadlineClass = isExpired ? `card--deadline` : ``;
