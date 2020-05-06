@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const MONTH_NAMES = [
   `January`,
   `February`,
@@ -13,18 +15,13 @@ const MONTH_NAMES = [
   `December`,
 ];
 
-const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
-};
 
 const formatDate = (date) => {
-  return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]}`;
+  return moment(date).format(`DD MMMM`);
 };
 
 const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours() % 24);
-  const minutes = castTimeFormat(date.getMinutes());
-  return `${hours}:${minutes}`;
+  return moment(date).format(`hh:mm`);
 };
 
 

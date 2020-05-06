@@ -1,6 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {DAYS, COLORS} from "../const.js";
-// import {formatDate, formatTime} from "../utils/common.js";
+import {formatDate, formatTime} from "../utils/common.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
@@ -96,13 +96,13 @@ export default class TaskEdit extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    const cardDate = element.querySelector(`.card__date`);
+    /* const cardDate = element.querySelector(`.card__date`);
     if (cardDate) {
       cardDate.addEventListener(`change`, (evt) => {
         this._dueDate = evt.target.value;
         this.rerender();
       });
-    }
+    } */
 
     element.querySelector(`.card__date-deadline-toggle`)
       .addEventListener(`click`, () => {
@@ -166,10 +166,10 @@ export default class TaskEdit extends AbstractSmartComponent {
       (isRepeatingTask && !this._isRepeating(activeRepeatingDays)) ||
       (isDateShowing && !dueDate);
 
-    /* const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
-    const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``; */
-    const date = (isDateShowing && dueDate) ? dueDate : ``;
-    const time = ``;
+    const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
+    const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
+    /* const date = (isDateShowing && dueDate) ? dueDate : ``;
+    const time = ``; */
 
     const repeatClass = isRepeatingTask ? `card--repeat` : ``;
     const deadlineClass = isExpired ? `card--deadline` : ``;
