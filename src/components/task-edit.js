@@ -1,6 +1,9 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {DAYS, COLORS} from "../const.js";
 // import {formatDate, formatTime} from "../utils/common.js";
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
 
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
