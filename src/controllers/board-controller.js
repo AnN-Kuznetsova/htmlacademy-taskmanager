@@ -10,15 +10,16 @@ const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
 export default class BoardController {
-  constructor(boardComponent) {
+  constructor(boardComponent, tasksModel) {
     this._boardComponent = boardComponent;
+    this._tasksModel = tasksModel;
 
     this._noTasksComponent = new NoTasks();
     this._sortComponent = new Sort();
     this._tasksComponent = new Tasks();
     this._loadMoreButtonComponent = new LoadMoreButton();
 
-    this._tasks = [];
+    //this._tasks = [];
     this._showingTasks = [];
     this._showingTaskControllers = [];
     this._showingTasksCount = 0;
@@ -77,14 +78,11 @@ export default class BoardController {
 
 
   _onDataChange(taskController, oldData, newData) {
-    const index = this._tasks.findIndex((it) => it === oldData);
+    const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
-    if (index === -1) {
-      return;
+    if (isSuccess) {
+      taskController.render(newData);
     }
-
-    this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
-    taskController.render(this._tasks[index]);
   }
 
 
@@ -95,13 +93,13 @@ export default class BoardController {
 
   _onSortTypeChange() {
     this._showingTaskControllers = [];
-    this._showingTasks = this._sortComponent.getSortedTasks(this._tasks);
+    this._showingTasks = this._sortComponent.getSortedTasks(this._tasksModel.getTasks());
     this._renderTaskList();
   }
 
 
-  render(tasks) {
-    this._tasks = tasks;
+  render() {
+    const tasks = this._tasksModel.getTasks();
     this._showingTasks = tasks.slice();
 
     const boardElement = this._boardComponent.getElement();
