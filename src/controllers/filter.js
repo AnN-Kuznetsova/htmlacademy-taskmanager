@@ -14,12 +14,12 @@ export default class FilterController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
 
-    this._tasksModel.setDataChangeHandler(this._onDataChange);
+    this._tasksModel.setOnDataChange(this._onDataChange);
   }
 
   render() {
     const container = this._container;
-    const allTasks = this._tasksModel.getTasks();
+    const allTasks = this._tasksModel.getTasksAll();
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
@@ -30,7 +30,7 @@ export default class FilterController {
     const oldComponent = this._filterComponent;
 
     this._filterComponent = new FilterComponent(filters);
-    this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    this._filterComponent.setOnFilterChange(this._onFilterChange);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
@@ -41,7 +41,7 @@ export default class FilterController {
 
   _onFilterChange(filterType) {
     this._activeFilterType = filterType;
-    //this._tasksModel.setFilter(filterType);
+    this._tasksModel.setFilter(filterType);
   }
 
   _onDataChange() {
