@@ -10,19 +10,19 @@ export default class Filter extends AbstractComponent {
     this._filters = filters;
   }
 
-  _createFilterMarkup(filter, isChecked) {
-    const {title, count} = filter;
+  _createFilterMarkup(filter) {
+    const {name, count, isChecked} = filter;
 
     return (
       `<input
         type="radio"
-        id="filter__${title}"
+        id="filter__${name}"
         class="filter__input visually-hidden"
         name="filter"
         ${isChecked ? `checked` : ``}
       />
-      <label for="filter__${title}" class="filter__label">
-        ${title} <span class="filter__${title}-count">${count}</span>
+      <label for="filter__${name}" class="filter__label">
+        ${name} <span class="filter__${name}-count">${count}</span>
       </label>`
     );
   }
@@ -33,7 +33,7 @@ export default class Filter extends AbstractComponent {
 
   getTemplate() {
     const filtersMarkup = this._filters
-      .map((it) => this._createFilterMarkup(it, it.isChecked))
+      .map((it) => this._createFilterMarkup(it))
       .join(`\n`);
 
     return (

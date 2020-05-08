@@ -14,20 +14,28 @@ export default class BoardController {
     this._boardComponent = boardComponent;
     this._tasksModel = tasksModel;
 
+    this._showingTasks = [];
+    this._showingTaskControllers = [];
+    this._showingTasksCount = 0;
+
     this._noTasksComponent = new NoTasks();
     this._sortComponent = new Sort();
     this._tasksComponent = new Tasks();
     this._loadMoreButtonComponent = new LoadMoreButton();
 
-    //this._tasks = [];
-    this._showingTasks = [];
-    this._showingTaskControllers = [];
-    this._showingTasksCount = 0;
-
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+
     this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
+    this._tasksModel.setOnFilterChange(this._onFilterChange);
+  }
+
+
+  _removeTasks() {
+    this._showingTaskControllers.forEach((taskController) => taskController.destroy());
+    this._showingTaskControllers = [];
   }
 
 
@@ -47,8 +55,10 @@ export default class BoardController {
   _renderLoadMoreButton() {
     const boardElement = this._boardComponent.getElement();
 
-    if ((this._showingTasksCount >= this._showingTasks.length)
-      || (boardElement.contains(this._loadMoreButtonComponent.getElement()))) {
+    if (this._showingTasksCount >= this._showingTasks.length) {
+      if (boardElement.contains(this._loadMoreButtonComponent.getElement())) {
+        remove(this._loadMoreButtonComponent);
+      }
       return;
     }
 
@@ -95,6 +105,18 @@ export default class BoardController {
     this._showingTaskControllers = [];
     this._showingTasks = this._sortComponent.getSortedTasks(this._tasksModel.getTasks());
     this._renderTaskList();
+  }
+
+
+  _updateTasks() {
+    this._removeTasks();
+    this._showingTasks = this._tasksModel.getTasks();
+    this._renderTaskList();
+  }
+
+
+  _onFilterChange() {
+    this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
   }
 
 

@@ -2,7 +2,7 @@ import {getTasksByFilter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
 
 
-export default class Tasks {
+export default class TasksModel {
   constructor() {
     this._tasks = [];
     this._activeFilterType = FilterType.ALL;
@@ -43,8 +43,12 @@ export default class Tasks {
     return true;
   }
 
-  setOnDataChange(handler) {
-    this._dataChangeHandlers.push(handler);
+  setOnDataChange(cb) {
+    this._dataChangeHandlers.push(cb);
+  }
+
+  setOnFilterChange(cb) {
+    this._filterChangeHandlers.push(cb);
   }
 
   setFilter(filterType) {
