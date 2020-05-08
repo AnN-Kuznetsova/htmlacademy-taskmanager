@@ -35,4 +35,8 @@ export default class Filter extends AbstractComponent {
       </section>`
     );
   }
+
+  setFilterChangeHandler(cb) {
+
+  }
 }

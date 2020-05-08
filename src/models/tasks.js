@@ -5,6 +5,11 @@ export default class Tasks {
     this._dataChangeHandlers = [];
   }
 
+
+  _callHandlers(handlers) {
+    handlers.forEach((handler) => handler());
+  }
+
   getTasks() {
     return this._tasks;
   }
@@ -32,7 +37,7 @@ export default class Tasks {
     this._dataChangeHandlers.push(handler);
   }
 
-  _callHandlers(handlers) {
-    handlers.forEach((handler) => handler());
+  setFilter(filterType) {
+
   }
 }
