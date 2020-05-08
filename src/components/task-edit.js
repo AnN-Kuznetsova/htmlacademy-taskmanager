@@ -1,6 +1,9 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {DAYS, COLORS} from "../const.js";
-// import {formatDate, formatTime} from "../utils/common.js";
+import {formatDate, formatTime} from "../utils/common.js";
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
 
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
@@ -15,8 +18,10 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
+    this._flatpickr = null;
     this._submitCallback = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
@@ -91,20 +96,11 @@ export default class TaskEdit extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    const cardDate = element.querySelector(`.card__date`);
-    if (cardDate) {
-      cardDate.addEventListener(`change`, (evt) => {
-        this._dueDate = evt.target.value;
-        this.rerender();
-      });
-    }
-
     element.querySelector(`.card__date-deadline-toggle`)
       .addEventListener(`click`, () => {
         this._isDateShowing = !this._isDateShowing;
         this.rerender();
       });
-
 
     element.querySelector(`.card__repeat-toggle`)
       .addEventListener(`click`, () => {
@@ -135,6 +131,31 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
 
 
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._dueDate || `today`,
+      });
+
+      if (!this._dueDate) {
+        this._dueDate = this._flatpickr.selectedDates;
+      }
+
+      this._flatpickr.config.onChange.push((selectedDates) => {
+        this._dueDate = selectedDates;
+      });
+    }
+  }
+
+
   getTemplate() {
     const [color, description, dueDate, isDateShowing, isRepeatingTask, activeRepeatingDays] =
       [this._color, this._description, this._dueDate, this._isDateShowing, this._isRepeatingTask, this._activeRepeatingDays];
@@ -144,10 +165,8 @@ export default class TaskEdit extends AbstractSmartComponent {
       (isRepeatingTask && !this._isRepeating(activeRepeatingDays)) ||
       (isDateShowing && !dueDate);
 
-    /* const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
-    const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``; */
-    const date = (isDateShowing && dueDate) ? dueDate : ``;
-    const time = ``;
+    const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
+    const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
 
     const repeatClass = isRepeatingTask ? `card--repeat` : ``;
     const deadlineClass = isExpired ? `card--deadline` : ``;
@@ -237,6 +256,14 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     this._submitCallback = cb;
   }
+
+
+  rerender() {
+    super.rerender();
+
+    this._applyFlatpickr();
+  }
+
 
   reset() {
     const task = this._task;
