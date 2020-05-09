@@ -2,7 +2,7 @@ import Sort from "../components/sort.js";
 import LoadMoreButton from "../components/load-more-button.js";
 import Tasks from "../components/tasks.js";
 import NoTasks from "../components/no-tasks.js";
-import TaskController from "./task-controller.js";
+import TaskController, {Mode as TaskControllerMode, EmptyTask} from "./task-controller.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 
 
@@ -17,6 +17,7 @@ export default class BoardController {
     this._showingTasks = [];
     this._showingTaskControllers = [];
     this._showingTasksCount = 0;
+    this._creatingTask = null;
 
     this._noTasksComponent = new NoTasks();
     this._sortComponent = new Sort();
@@ -105,10 +106,34 @@ export default class BoardController {
 
 
   _onDataChange(taskController, oldData, newData) {
-    const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
+    if (oldData === EmptyTask) {
+      this._creatingTask = null;
+      if (newData === null) {
+        taskController.destroy();
+        this._updateTasks();
+      } else {
+        this._tasksModel.addTask(newData);
+        taskController.render(newData, TaskControllerMode.DEFAULT);
 
-    if (isSuccess) {
-      taskController.render(newData);
+        if (this._showingTasksCount % SHOWING_TASKS_COUNT_BY_BUTTON === 0) {
+          const destroyedTask = this._showedTaskControllers.pop();
+          destroyedTask.destroy();
+        }
+
+        this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
+        this._showingTasksCount = this._showedTaskControllers.length;
+
+        this._renderLoadMoreButton();
+      }
+    } else if (newData === null) {
+      this._tasksModel.removeTask(oldData.id);
+      this._updateTasks();
+    } else {
+      const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
+
+      if (isSuccess) {
+        taskController.render(newData, TaskControllerMode.DEFAULT);
+      }
     }
   }
 
