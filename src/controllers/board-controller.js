@@ -81,10 +81,16 @@ export default class BoardController {
 
 
   _renderTaskList() {
-    this._tasksComponent.getElement().innerHTML = ``;
+    this._removeTasks();
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
     this._renderTasks(this._showingTasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
     this._renderLoadMoreButton();
+  }
+
+
+  _updateTasks() {
+    this._showingTasks = this._tasksModel.getTasks();
+    this._renderTaskList();
   }
 
 
@@ -103,21 +109,13 @@ export default class BoardController {
 
 
   _onSortTypeChange() {
-    this._showingTaskControllers = [];
     this._showingTasks = this._sortComponent.getSortedTasks(this._tasksModel.getTasks());
     this._renderTaskList();
   }
 
 
-  _updateTasks() {
-    this._removeTasks();
-    this._showingTasks = this._tasksModel.getTasks();
-    this._renderTaskList();
-  }
-
-
   _onFilterChange() {
-    this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
+    this._updateTasks();
   }
 
 
