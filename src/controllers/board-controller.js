@@ -40,6 +40,22 @@ export default class BoardController {
   }
 
 
+  _updateTasks() {
+    this._showingTasks = this._sortComponent.getSortedTasks(this._tasksModel.getTasks());
+    this._renderTaskList();
+  }
+
+
+  _onSortTypeChange() {
+    this._updateTasks();
+  }
+
+
+  _onFilterChange() {
+    this._updateTasks();
+  }
+
+
   _renderTasks(tasks, onDataChange, onViewChange) {
     const newTaskControllers = tasks.map((task) => {
       const taskController = new TaskController(this._tasksComponent.getElement(), onDataChange, onViewChange);
@@ -88,12 +104,6 @@ export default class BoardController {
   }
 
 
-  _updateTasks() {
-    this._showingTasks = this._tasksModel.getTasks();
-    this._renderTaskList();
-  }
-
-
   _onDataChange(taskController, oldData, newData) {
     const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
@@ -105,17 +115,6 @@ export default class BoardController {
 
   _onViewChange() {
     this._showingTaskControllers.forEach((it) => it.setDefaultView());
-  }
-
-
-  _onSortTypeChange() {
-    this._showingTasks = this._sortComponent.getSortedTasks(this._tasksModel.getTasks());
-    this._renderTaskList();
-  }
-
-
-  _onFilterChange() {
-    this._updateTasks();
   }
 
 
