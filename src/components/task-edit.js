@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {DAYS, COLORS} from "../const.js";
+import {MIN_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH, DAYS, COLORS} from "../const.js";
 import {formatDate, formatTime, isRepeating, isOverdueDate} from "../utils/common.js";
 import flatpickr from "flatpickr";
 
@@ -24,6 +24,14 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
+  }
+
+
+  _isAllowableDescriptionLength(description) {
+    const length = description.length;
+
+    return length >= MIN_DESCRIPTION_LENGTH &&
+      length <= MAX_DESCRIPTION_LENGTH;
   }
 
 
@@ -123,6 +131,9 @@ export default class TaskEdit extends AbstractSmartComponent {
     element.querySelector(`.card__text`)
       .addEventListener(`input`, (evt) => {
         this._description = evt.target.value;
+
+        const saveButton = this.getElement().querySelector(`.card__save`);
+        saveButton.disabled = !this._isAllowableDescriptionLength(this._currentDescription);
       });
   }
 
@@ -152,6 +163,25 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
 
 
+  _parseFormData(formData) {
+    const repeatingDays = DAYS.reduce((acc, day) => {
+      acc[day] = false;
+      return acc;
+    }, {});
+    const date = formData.get(`date`);
+
+    return {
+      description: formData.get(`text`),
+      color: formData.get(`color`),
+      dueDate: date ? new Date(date) : null,
+      repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+        acc[it] = true;
+        return acc;
+      }, repeatingDays),
+    };
+  }
+
+
   getTemplate() {
     const [color, description, dueDate, isDateShowing, isRepeatingTask, activeRepeatingDays] =
       [this._color, this._description, this._dueDate, this._isDateShowing, this._isRepeatingTask, this._activeRepeatingDays];
@@ -159,7 +189,8 @@ export default class TaskEdit extends AbstractSmartComponent {
     const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
     const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
       (isRepeatingTask && !isRepeating(activeRepeatingDays)) ||
-      (isDateShowing && !dueDate);
+      (isDateShowing && !dueDate) ||
+      !this._isAllowableDescriptionLength(description);
 
     const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
     const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
@@ -298,24 +329,5 @@ export default class TaskEdit extends AbstractSmartComponent {
     const formData = new FormData(form);
 
     return this._parseFormData(formData);
-  }
-
-
-  _parseFormData(formData) {
-    const repeatingDays = DAYS.reduce((acc, day) => {
-      acc[day] = false;
-      return acc;
-    }, {});
-    const date = formData.get(`date`);
-
-    return {
-      description: formData.get(`text`),
-      color: formData.get(`color`),
-      dueDate: date ? new Date(date) : null,
-      repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-        acc[it] = true;
-        return acc;
-      }, repeatingDays),
-    };
   }
 }

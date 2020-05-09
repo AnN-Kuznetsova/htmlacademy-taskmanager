@@ -17,7 +17,7 @@ export default class BoardController {
     this._showingTasks = [];
     this._showingTaskControllers = [];
     this._showingTasksCount = 0;
-    this._creatingTask = null;
+    this._creatingTaskController = null;
 
     this._noTasksComponent = new NoTasks();
     this._sortComponent = new Sort();
@@ -107,7 +107,7 @@ export default class BoardController {
 
   _onDataChange(taskController, oldData, newData) {
     if (oldData === EmptyTask) {
-      this._creatingTask = null;
+      this._creatingTaskController = null;
       if (newData === null) {
         taskController.destroy();
         this._updateTasks();
@@ -159,5 +159,16 @@ export default class BoardController {
     render(boardElement, this._tasksComponent, RenderPosition.BEFOREEND);
 
     this._renderTaskList();
+  }
+
+
+  createTask() {
+    if (this._creatingTaskController) {
+      return;
+    }
+
+    const taskListElement = this._tasksComponent.getElement();
+    this._creatingTaskController = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
+    this._creatingTaskController.render(EmptyTask, TaskControllerMode.ADDING);
   }
 }

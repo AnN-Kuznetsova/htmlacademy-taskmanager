@@ -1,3 +1,6 @@
+const MIN_DESCRIPTION_LENGTH = 1;
+const MAX_DESCRIPTION_LENGTH = 140;
+
 const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
 const Color = {
@@ -21,6 +24,8 @@ const FilterType = {
 
 
 export {
+  MIN_DESCRIPTION_LENGTH,
+  MAX_DESCRIPTION_LENGTH,
   DAYS,
   COLORS,
   FilterType,
