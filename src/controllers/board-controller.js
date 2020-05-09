@@ -61,7 +61,7 @@ export default class BoardController {
     const newTaskControllers = tasks.map((task) => {
       const taskController = new TaskController(this._tasksComponent.getElement(), onDataChange, onViewChange);
 
-      taskController.render(task);
+      taskController.render(task, TaskControllerMode.DEFAULT);
 
       return taskController;
     });

@@ -20,6 +20,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     this._flatpickr = null;
     this._submitCallback = null;
+    this._deleteButtonClickCallback = null;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -239,8 +240,19 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
 
 
+  removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    super.removeElement();
+  }
+
+
   recoveryListeners() {
     this.setOnEditFormSubmit(this._submitCallback);
+    this.setOnDeleteButtonClickr(this._deleteButtonClickCallback);
     this._subscribeOnEvents();
   }
 
@@ -250,6 +262,13 @@ export default class TaskEdit extends AbstractSmartComponent {
       .addEventListener(`submit`, cb);
 
     this._submitCallback = cb;
+  }
+
+  setOnDeleteButtonClick(cb) {
+    this.getElement().querySelector(`.card__delete`)
+      .addEventListener(`click`, cb);
+
+    this._deleteButtonClickCallback = cb;
   }
 
 
@@ -271,5 +290,32 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
     this.rerender();
+  }
+
+
+  getData() {
+    const form = this.getElement().querySelector(`.card__form`);
+    const formData = new FormData(form);
+
+    return this._parseFormData(formData);
+  }
+
+
+  _parseFormData(formData) {
+    const repeatingDays = DAYS.reduce((acc, day) => {
+      acc[day] = false;
+      return acc;
+    }, {});
+    const date = formData.get(`date`);
+
+    return {
+      description: formData.get(`text`),
+      color: formData.get(`color`),
+      dueDate: date ? new Date(date) : null,
+      repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+        acc[it] = true;
+        return acc;
+      }, repeatingDays),
+    };
   }
 }
