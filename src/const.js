@@ -1,6 +1,14 @@
 const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
-const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
+const Color = {
+  BLACK: `black`,
+  YELLOW: `yellow`,
+  BLUE: `blue`,
+  GREEN: `green`,
+  PINK: `pink`,
+};
+
+const COLORS = Object.values(Color);
 
 const FilterType = {
   ALL: `all`,
