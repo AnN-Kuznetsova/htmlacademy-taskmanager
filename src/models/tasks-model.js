@@ -16,9 +16,9 @@ export default class TasksModel {
     handlers.forEach((handler) => handler());
   }
 
-  /* _getTaskIndex(taskId) {
+  _getTaskIndex(taskId) {
     return this._tasks.findIndex((it) => it.id === taskId);
-  } */
+  }
 
   getTasks() {
     return getTasksByFilter(this._tasks, this._activeFilterType);
@@ -34,7 +34,7 @@ export default class TasksModel {
   }
 
   removeTask(id) {
-    const index = this._tasks.findIndex((it) => it.id === id);
+    const index = this._getTaskIndex(id);
 
     if (index === -1) {
       return false;
@@ -47,7 +47,7 @@ export default class TasksModel {
   }
 
   updateTask(id, task) {
-    const index = this._tasks.findIndex((it) => it.id === id);
+    const index = this._getTaskIndex(id);
 
     if (index === -1) {
       return false;
