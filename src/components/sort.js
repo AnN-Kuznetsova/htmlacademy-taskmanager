@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const SortType = {
+export const SortType = {
   DATE_DOWN: `date-down`,
   DATE_UP: `date-up`,
   DEFAULT: `default`,
@@ -25,6 +25,10 @@ export default class Sort extends AbstractComponent {
 
   getSortType() {
     return this._currentSortType;
+  }
+
+  setSortType(sortType) {
+    this._currentSortType = sortType;
   }
 
   setOnSortTypeChange(cb) {
