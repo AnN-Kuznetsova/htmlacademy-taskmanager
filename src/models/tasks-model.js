@@ -76,4 +76,8 @@ export default class TasksModel {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
   }
+
+  getFilter() {
+    return this._activeFilterType;
+  }
 }

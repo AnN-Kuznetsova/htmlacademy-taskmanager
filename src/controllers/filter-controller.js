@@ -13,8 +13,10 @@ export default class FilterController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+    this._onTasksModelFilterChange = this._onTasksModelFilterChange.bind(this);
 
     this._tasksModel.setOnDataChange(this._onDataChange);
+    this._tasksModel.setOnFilterChange(this._onTasksModelFilterChange);
   }
 
   render() {
@@ -48,8 +50,8 @@ export default class FilterController {
     this.render();
   }
 
-  setActiveFilterType(filterType) {
-    this._activeFilterType = filterType;
-    this._onFilterChange(filterType);
+  _onTasksModelFilterChange() {
+    this._activeFilterType = this._tasksModel.getFilter();
+    this.render();
   }
 }
