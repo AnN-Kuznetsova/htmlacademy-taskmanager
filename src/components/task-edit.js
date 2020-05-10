@@ -133,7 +133,7 @@ export default class TaskEdit extends AbstractSmartComponent {
         this._description = evt.target.value;
 
         const saveButton = this.getElement().querySelector(`.card__save`);
-        saveButton.disabled = !this._isAllowableDescriptionLength(this._currentDescription);
+        saveButton.disabled = !this._isAllowableDescriptionLength(this._description);
       });
   }
 
@@ -283,7 +283,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setOnEditFormSubmit(this._submitCallback);
-    this.setOnDeleteButtonClickr(this._deleteButtonClickCallback);
+    this.setOnDeleteButtonClick(this._deleteButtonClickCallback);
     this._subscribeOnEvents();
   }
 

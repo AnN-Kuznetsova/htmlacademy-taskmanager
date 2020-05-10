@@ -1,9 +1,10 @@
-import Sort from "../components/sort.js";
+import Sort, {SortType} from "../components/sort.js";
 import LoadMoreButton from "../components/load-more-button.js";
 import Tasks from "../components/tasks.js";
 import NoTasks from "../components/no-tasks.js";
 import TaskController, {Mode as TaskControllerMode, EmptyTask} from "./task-controller.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
+import {FilterType} from "../const.js";
 
 
 const SHOWING_TASKS_COUNT_ON_START = 8;
@@ -42,6 +43,11 @@ export default class BoardController {
 
 
   _updateTasks() {
+    if (this._creatingTaskController) {
+      this._creatingTaskController.destroy();
+      this._creatingTaskController = null;
+    }
+
     this._showingTasks = this._sortComponent.getSortedTasks(this._tasksModel.getTasks());
     this._renderTaskList();
   }
@@ -107,23 +113,11 @@ export default class BoardController {
 
   _onDataChange(taskController, oldData, newData) {
     if (oldData === EmptyTask) {
-      this._creatingTaskController = null;
       if (newData === null) {
-        taskController.destroy();
         this._updateTasks();
       } else {
         this._tasksModel.addTask(newData);
-        taskController.render(newData, TaskControllerMode.DEFAULT);
-
-        if (this._showingTasksCount % SHOWING_TASKS_COUNT_BY_BUTTON === 0) {
-          const destroyedTask = this._showedTaskControllers.pop();
-          destroyedTask.destroy();
-        }
-
-        this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
-        this._showingTasksCount = this._showedTaskControllers.length;
-
-        this._renderLoadMoreButton();
+        this._updateTasks();
       }
     } else if (newData === null) {
       this._tasksModel.removeTask(oldData.id);
@@ -166,6 +160,9 @@ export default class BoardController {
     if (this._creatingTaskController) {
       return;
     }
+
+    this._sortComponent.setSortType(SortType.DEFAULT);
+    this._tasksModel.setFilter(FilterType.ALL);
 
     const taskListElement = this._tasksComponent.getElement();
     this._creatingTaskController = new TaskController(taskListElement, this._onDataChange, this._onViewChange);

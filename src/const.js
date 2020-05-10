@@ -27,6 +27,7 @@ export {
   MIN_DESCRIPTION_LENGTH,
   MAX_DESCRIPTION_LENGTH,
   DAYS,
+  Color,
   COLORS,
   FilterType,
 };

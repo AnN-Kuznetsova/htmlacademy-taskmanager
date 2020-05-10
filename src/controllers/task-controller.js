@@ -1,7 +1,7 @@
 import Task from "../components/task.js";
 import TaskEdit from "../components/task-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
-import {COLOR} from "../const.js";
+import {Color} from "../const.js";
 
 
 export const Mode = {
@@ -22,7 +22,7 @@ export const EmptyTask = {
     "sa": false,
     "su": false,
   },
-  color: COLOR.BLACK,
+  color: Color.BLACK,
   isFavorite: false,
   isArchive: false,
 };

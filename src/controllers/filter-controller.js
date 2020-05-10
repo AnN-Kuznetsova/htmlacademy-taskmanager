@@ -47,4 +47,9 @@ export default class FilterController {
   _onDataChange() {
     this.render();
   }
+
+  setActiveFilterType(filterType) {
+    this._activeFilterType = filterType;
+    this._onFilterChange(filterType);
+  }
 }
