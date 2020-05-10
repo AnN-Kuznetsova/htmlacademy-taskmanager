@@ -178,6 +178,8 @@ export default class TaskEdit extends AbstractSmartComponent {
         acc[it] = true;
         return acc;
       }, repeatingDays),
+      isFavorite: this._task.isFavorite,
+      isArchive: this._task.isArchive,
     };
   }
 
