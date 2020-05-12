@@ -32,7 +32,7 @@ export default class Statistics extends AbstractSmartComponent {
 
 
   getTemplate() {
-    const tasks = this._tasks.getTasks();
+    const tasks = this._tasks.getTasksAll();
     const dateFrom = this._dateFrom;
     const dateTo = this._dateTo;
 
@@ -92,8 +92,8 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetCharts();
 
-    this._daysChart = this._renderDaysChart(daysCtx, this._tasks.getTasks(), this._dateFrom, this._dateTo);
-    this._colorsChart = this._renderColorsChart(colorsCtx, this._tasks.getTasks());
+    this._daysChart = this._renderDaysChart(daysCtx, this._tasks.getTasksAll(), this._dateFrom, this._dateTo);
+    this._colorsChart = this._renderColorsChart(colorsCtx, this._tasks.getTasksAll());
   }
 
   _resetCharts() {

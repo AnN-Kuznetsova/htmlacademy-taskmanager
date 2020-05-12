@@ -161,12 +161,17 @@ export default class BoardController {
       return;
     }
 
-    this._sortComponent.setSortType(SortType.DEFAULT);
-    this._tasksModel.setFilter(FilterType.ALL);
+    this._resetBoard();
 
     const taskListElement = this._tasksComponent.getElement();
     this._creatingTaskController = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
     this._creatingTaskController.render(EmptyTask, TaskControllerMode.ADDING);
+  }
+
+
+  _resetBoard() {
+    this._sortComponent.setSortType(SortType.DEFAULT);
+    this._tasksModel.setFilter(FilterType.ALL);
   }
 
 
