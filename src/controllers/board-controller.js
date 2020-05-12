@@ -168,4 +168,14 @@ export default class BoardController {
     this._creatingTaskController = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
     this._creatingTaskController.render(EmptyTask, TaskControllerMode.ADDING);
   }
+
+
+  hide() {
+    this._boardComponent.hide();
+  }
+
+
+  show() {
+    this._boardComponent.show();
+  }
 }
