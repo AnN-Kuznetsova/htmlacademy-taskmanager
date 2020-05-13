@@ -176,11 +176,13 @@ export default class BoardController {
 
 
   hide() {
+    this._resetBoard();
     this._boardComponent.hide();
   }
 
 
   show() {
+    this._resetBoard();
     this._boardComponent.show();
   }
 }
