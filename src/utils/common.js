@@ -23,10 +23,25 @@ const isOneDay = (dateA, dateB) => {
   return a.diff(b, `days`) === 0 && dateA.getDate() === dateB.getDate();
 };
 
+const getEnumPropertyKey = (Enumeration, value) => {
+  let propertyKey = null;
+
+  for (const twain of Object.entries(Enumeration)) {
+    if (twain.includes(value)) {
+      propertyKey = twain[0];
+      break;
+    }
+  }
+
+  return propertyKey;
+};
+
+
 export {
   formatDate,
   formatTime,
   isRepeating,
   isOverdueDate,
   isOneDay,
+  getEnumPropertyKey,
 };

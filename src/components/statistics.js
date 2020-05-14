@@ -1,16 +1,17 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {isOneDay} from "../utils/common.js";
+import {isOneDay, getEnumPropertyKey} from "../utils/common.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import moment from "moment";
 import flatpickr from "flatpickr";
+import {Color} from "../const.js";
 
-const colorToHex = {
-  black: `#000000`,
-  blue: `#0c5cdd`,
-  green: `#31b55c`,
-  pink: `#ff3cb9`,
-  yellow: `#ffe125`,
+const ColorToHex = {
+  BLACK: `#000000`,
+  BLUE: `#0c5cdd`,
+  GREEN: `#31b55c`,
+  PINK: `#ff3cb9`,
+  YELLOW: `#ffe125`,
 };
 
 
@@ -176,7 +177,7 @@ export default class Statistics extends AbstractSmartComponent {
         labels: colors,
         datasets: [{
           data: colors.map((color) => this._calcUniqCountColor(tasks, color)),
-          backgroundColor: colors.map((color) => colorToHex[color])
+          backgroundColor: colors.map((color) => ColorToHex[getEnumPropertyKey(Color, color)])
         }]
       },
       options: {
