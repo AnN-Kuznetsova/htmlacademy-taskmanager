@@ -16,10 +16,10 @@ const ColorToHex = {
 
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor({tasks, dateFrom, dateTo}) {
+  constructor({tasksModel, dateFrom, dateTo}) {
     super();
 
-    this._tasks = tasks;
+    this._tasksModel = tasksModel;
     this._dateFrom = dateFrom;
     this._dateTo = dateTo;
 
@@ -33,7 +33,7 @@ export default class Statistics extends AbstractSmartComponent {
 
 
   getTemplate() {
-    const tasks = this._tasks.getTasksAll();
+    const tasks = this._tasksModel.getTasksAll();
     const dateFrom = this._dateFrom;
     const dateTo = this._dateTo;
 
@@ -68,13 +68,13 @@ export default class Statistics extends AbstractSmartComponent {
   show() {
     super.show();
 
-    this.rerender(this._tasks, this._dateFrom, this._dateTo);
+    this.rerender(this._tasksModel, this._dateFrom, this._dateTo);
   }
 
   recoveryListeners() {}
 
-  rerender(tasks, dateFrom, dateTo) {
-    this._tasks = tasks;
+  rerender(tasksModel, dateFrom, dateTo) {
+    this._tasksModel = tasksModel;
     this._dateFrom = dateFrom;
     this._dateTo = dateTo;
 
@@ -93,8 +93,8 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetCharts();
 
-    this._daysChart = this._renderDaysChart(daysCtx, this._tasks.getTasksAll(), this._dateFrom, this._dateTo);
-    this._colorsChart = this._renderColorsChart(colorsCtx, this._tasks.getTasksAll());
+    this._daysChart = this._renderDaysChart(daysCtx, this._tasksModel.getTasksAll(), this._dateFrom, this._dateTo);
+    this._colorsChart = this._renderColorsChart(colorsCtx, this._tasksModel.getTasksAll());
   }
 
   _resetCharts() {
@@ -121,7 +121,7 @@ export default class Statistics extends AbstractSmartComponent {
       mode: `range`,
       onChange: (dates) => {
         if (dates.length === 2) {
-          this.rerender(this._tasks, dates[0], dates[1]);
+          this.rerender(this._tasksModel, dates[0], dates[1]);
         }
       }
     });

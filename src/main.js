@@ -36,7 +36,7 @@ const dateFrom = (() => {
   d.setDate(d.getDate() - 7);
   return d;
 })();
-const statisticsComponent = new Statistics({tasks: tasksModel, dateFrom, dateTo});
+const statisticsComponent = new Statistics({tasksModel, dateFrom, dateTo});
 render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
 
