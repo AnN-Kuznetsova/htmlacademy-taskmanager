@@ -8,6 +8,9 @@ import TasksModel from "./models/tasks-model.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 
+const AUTHORIZATION = `Basic fdHJdhfvhd=565Jfvf`;
+
+
 const dateTo = new Date();
 const dateFrom = (() => {
   const d = new Date(dateTo);
@@ -16,7 +19,7 @@ const dateFrom = (() => {
 })();
 
 
-const api = new API();
+const api = new API(AUTHORIZATION);
 const tasksModel = new TasksModel();
 
 

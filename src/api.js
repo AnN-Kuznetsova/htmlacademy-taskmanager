@@ -1,7 +1,14 @@
-const API = class {
-  getTasks() {
-    return fetch(`https://11.ecmascript.pages.academy/task-manager/tasks`);
+export default class API {
+  constructor(authorization) {
+    this._authorization = authorization;
   }
-};
 
-export default API;
+
+  getTasks() {
+    const headers = new Headers();
+    headers.append(`Authorization`, this._authorization);
+
+    return fetch(`https://11.ecmascript.pages.academy/task-manager/tasks`, {headers})
+      .then((response) => response.json());
+  }
+}
