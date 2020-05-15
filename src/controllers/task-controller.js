@@ -60,8 +60,8 @@ export default class TaskController {
         return acc;
       }, repeatingDays),
       "color": formData.get(`color`),
-      "is_favorite": false,
-      "is_done": false,
+      "is_favorite": this._task.isFavorite,
+      "is_archived": this._task.isArchive,
     });
   }
 
