@@ -1,9 +1,29 @@
 import TaskModel from "./models/task-model.js";
 
 
+const Method = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};
+
+
 export default class API {
-  constructor(authorization) {
+  constructor(endPoint, authorization) {
+    this._endPoint = endPoint;
     this._authorization = authorization;
+  }
+
+
+  _load({url, method = Method.GET, body = null, headers = new Headers()}) {
+    headers.append(`Authorization`, this._authorization);
+
+    return fetch(`${this._endPoint}/${url}`, {method, headers, body})
+      .then(this._checkStatus)
+      .catch((err) => {
+        throw err;
+      });
   }
 
 
@@ -17,27 +37,19 @@ export default class API {
 
 
   getTasks() {
-    const headers = new Headers();
-    headers.append(`Authorization`, this._authorization);
-
-    return fetch(`https://11.ecmascript.pages.academy/task-manager/tasks`, {headers})
-      .then(this._checkStatus)
+    return this._load({url: `tasks`})
       .then((response) => response.json())
       .then(TaskModel.parseTasks);
   }
 
 
   updateTask(id, data) {
-    const headers = new Headers();
-    headers.append(`Authorization`, this._authorization);
-    headers.append(`Content-Type`, `application/json`);
-
-    return fetch(`https://11.ecmascript.pages.academy/task-manager/tasks/${id}`, {
-      method: `PUT`,
-      headers,
+    return this._load({
+      url: `tasks/${id}`,
+      method: Method.PUT,
+      headers: new Headers({"Content-Type": `application/json`}),
       body: JSON.stringify(data.toRAW()),
     })
-      .then(this._checkStatus)
       .then((response) => response.json())
       .then(TaskModel.parseTask);
   }
