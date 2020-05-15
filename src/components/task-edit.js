@@ -6,6 +6,7 @@ import {encode} from "he";
 
 import "flatpickr/dist/flatpickr.min.css";
 
+
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
@@ -164,27 +165,6 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
 
 
-  _parseFormData(formData) {
-    const repeatingDays = DAYS.reduce((acc, day) => {
-      acc[day] = false;
-      return acc;
-    }, {});
-    const date = formData.get(`date`);
-
-    return {
-      description: formData.get(`text`),
-      color: formData.get(`color`),
-      dueDate: date ? new Date(date) : null,
-      repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-        acc[it] = true;
-        return acc;
-      }, repeatingDays),
-      isFavorite: this._task.isFavorite,
-      isArchive: this._task.isArchive,
-    };
-  }
-
-
   getTemplate() {
     const [color, currentDescription, dueDate, isDateShowing, isRepeatingTask, activeRepeatingDays] =
       [this._color, this._description, this._dueDate, this._isDateShowing, this._isRepeatingTask, this._activeRepeatingDays];
@@ -331,8 +311,6 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
-
-    return this._parseFormData(formData);
+    return new FormData(form);
   }
 }

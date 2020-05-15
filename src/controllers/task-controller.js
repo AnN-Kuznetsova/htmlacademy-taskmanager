@@ -1,7 +1,8 @@
 import Task from "../components/task.js";
 import TaskEdit from "../components/task-edit.js";
+import TaskModel from "../models/task-model.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
-import {Color} from "../const.js";
+import {Color, DAYS} from "../const.js";
 
 
 export const Mode = {
@@ -40,6 +41,28 @@ export default class TaskController {
     this._taskEditComponent = null;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._parseFormData = this._parseFormData.bind(this);
+  }
+
+
+  _parseFormData(formData) {
+    const date = formData.get(`date`);
+    const repeatingDays = DAYS.reduce((acc, day) => {
+      acc[day] = false;
+      return acc;
+    }, {});
+
+    return new TaskModel({
+      "description": formData.get(`text`),
+      "dueDate": date ? new Date(date) : null,
+      "repeating_days": formData.getAll(`repeat`).reduce((acc, it) => {
+        acc[it] = true;
+        return acc;
+      }, repeatingDays),
+      "color": formData.get(`color`),
+      "is_favorite": false,
+      "is_done": false,
+    });
   }
 
 
@@ -81,18 +104,27 @@ export default class TaskController {
 
 
   _onArchiveButtonClick() {
-    this._onDataChange(this, this._task, Object.assign({}, this._task, {isArchive: !this._task.isArchive}));
+    const newTask = TaskModel.clone(this._task);
+    newTask.isArchive = !newTask.isArchive;
+
+    this._onDataChange(this, this._task, newTask);
   }
 
 
   _onFavoritesButtonClick() {
-    this._onDataChange(this, this._task, Object.assign({}, this._task, {isFavorite: !this._task.isFavorite}));
+    const newTask = TaskModel.clone(this._task);
+    newTask.isFavorite = !newTask.isFavorite;
+
+    this._onDataChange(this, this._task, newTask);
   }
 
 
   _onEditFormSubmit(evt) {
     evt.preventDefault();
-    const data = this._taskEditComponent.getData();
+
+    const formData = this._taskEditComponent.getData();
+    const data = this._parseFormData(formData);
+
     this._onDataChange(this, this._task, data);
   }
 
