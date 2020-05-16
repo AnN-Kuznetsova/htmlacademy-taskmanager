@@ -10,7 +10,7 @@ import {render, RenderPosition, remove} from "./utils/render.js";
 
 
 const AUTHORIZATION = `Basic fdHJdhfvhd=565Jfvf`;
-const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
+const END_POINT = `https://11.ecmascript.pages.academy/task-manager1`;
 
 
 const dateTo = new Date();
@@ -37,11 +37,14 @@ const filterController = new FilterController(siteMainElement, tasksModel);
 
 render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
 filterController.render();
-filterController.switchOff();
+filterController.renderDisabled(true);
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 render(boardComponent.getElement(), loadingComponent, RenderPosition.AFTERBEGIN);
 render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
+
+
+boardController.setNoTasksDisplayChangeHandlers(filterController.renderDisabled);
 
 
 siteMenuComponent.setOnChange((menuItem) => {
@@ -72,7 +75,11 @@ siteMenuComponent.setOnChange((menuItem) => {
 api.getTasks()
   .then((tasks) => {
     tasksModel.setTasks(tasks);
-    filterController.switchOn();
+  })
+  .catch(() => {
+    tasksModel.setTasks([]);
+  })
+  .then(() => {
     remove(loadingComponent);
     boardController.render();
   });
