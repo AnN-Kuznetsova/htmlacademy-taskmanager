@@ -10,6 +10,7 @@ export default class FilterController {
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
+    this._filterElements = [];
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
@@ -18,6 +19,24 @@ export default class FilterController {
     this._tasksModel.setOnDataChange(this._onDataChange);
     this._tasksModel.setOnFilterChange(this._onTasksModelFilterChange);
   }
+
+
+  switchOff() {
+    this._filterElements = this._filterComponent.getElement()
+      .querySelectorAll(`.filter__input`);
+
+    for (const filterElement of this._filterElements) {
+      filterElement.disabled = true;
+    }
+  }
+
+
+  switchOn() {
+    for (const filterElement of this._filterElements) {
+      filterElement.disabled = false;
+    }
+  }
+
 
   render() {
     const container = this._container;
