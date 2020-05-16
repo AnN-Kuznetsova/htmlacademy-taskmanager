@@ -1,24 +1,25 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {isOneDay} from "../utils/common.js";
+import {isOneDay, getEnumPropertyKey} from "../utils/common.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import moment from "moment";
 import flatpickr from "flatpickr";
+import {Color} from "../const.js";
 
-const colorToHex = {
-  black: `#000000`,
-  blue: `#0c5cdd`,
-  green: `#31b55c`,
-  pink: `#ff3cb9`,
-  yellow: `#ffe125`,
+const ColorToHex = {
+  BLACK: `#000000`,
+  BLUE: `#0c5cdd`,
+  GREEN: `#31b55c`,
+  PINK: `#ff3cb9`,
+  YELLOW: `#ffe125`,
 };
 
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor({tasks, dateFrom, dateTo}) {
+  constructor({tasksModel, dateFrom, dateTo}) {
     super();
 
-    this._tasks = tasks;
+    this._tasksModel = tasksModel;
     this._dateFrom = dateFrom;
     this._dateTo = dateTo;
 
@@ -32,7 +33,7 @@ export default class Statistics extends AbstractSmartComponent {
 
 
   getTemplate() {
-    const tasks = this._tasks.getTasksAll();
+    const tasks = this._tasksModel.getTasksAll();
     const dateFrom = this._dateFrom;
     const dateTo = this._dateTo;
 
@@ -67,13 +68,13 @@ export default class Statistics extends AbstractSmartComponent {
   show() {
     super.show();
 
-    this.rerender(this._tasks, this._dateFrom, this._dateTo);
+    this.rerender(this._tasksModel, this._dateFrom, this._dateTo);
   }
 
   recoveryListeners() {}
 
-  rerender(tasks, dateFrom, dateTo) {
-    this._tasks = tasks;
+  rerender(tasksModel, dateFrom, dateTo) {
+    this._tasksModel = tasksModel;
     this._dateFrom = dateFrom;
     this._dateTo = dateTo;
 
@@ -92,8 +93,8 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetCharts();
 
-    this._daysChart = this._renderDaysChart(daysCtx, this._tasks.getTasksAll(), this._dateFrom, this._dateTo);
-    this._colorsChart = this._renderColorsChart(colorsCtx, this._tasks.getTasksAll());
+    this._daysChart = this._renderDaysChart(daysCtx, this._tasksModel.getTasksAll(), this._dateFrom, this._dateTo);
+    this._colorsChart = this._renderColorsChart(colorsCtx, this._tasksModel.getTasksAll());
   }
 
   _resetCharts() {
@@ -120,7 +121,7 @@ export default class Statistics extends AbstractSmartComponent {
       mode: `range`,
       onChange: (dates) => {
         if (dates.length === 2) {
-          this.rerender(this._tasks, dates[0], dates[1]);
+          this.rerender(this._tasksModel, dates[0], dates[1]);
         }
       }
     });
@@ -176,7 +177,7 @@ export default class Statistics extends AbstractSmartComponent {
         labels: colors,
         datasets: [{
           data: colors.map((color) => this._calcUniqCountColor(tasks, color)),
-          backgroundColor: colors.map((color) => colorToHex[color])
+          backgroundColor: colors.map((color) => ColorToHex[getEnumPropertyKey(Color, color)])
         }]
       },
       options: {

@@ -11,9 +11,10 @@ const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
 export default class BoardController {
-  constructor(boardComponent, tasksModel) {
+  constructor(boardComponent, tasksModel, api) {
     this._boardComponent = boardComponent;
     this._tasksModel = tasksModel;
+    this._api = api;
 
     this._showingTasks = [];
     this._showingTaskControllers = [];
@@ -123,11 +124,14 @@ export default class BoardController {
       this._tasksModel.removeTask(oldData.id);
       this._updateTasks();
     } else {
-      const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
+      this._api.updateTask(oldData.id, newData)
+        .then((taskModel) => {
+          const isSuccess = this._tasksModel.updateTask(oldData.id, taskModel);
 
-      if (isSuccess) {
-        taskController.render(newData, TaskControllerMode.DEFAULT);
-      }
+          if (isSuccess) {
+            taskController.render(taskModel, TaskControllerMode.DEFAULT);
+          }
+        });
     }
   }
 
