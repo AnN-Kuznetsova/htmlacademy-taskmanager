@@ -2,10 +2,11 @@ import API from "./api.js";
 import Board from "./components/board.js";
 import BoardController from "./controllers/board-controller.js";
 import FilterController from "./controllers/filter-controller.js";
+import Loading from "./components/loading.js";
 import SiteMenu, {MenuItem} from "./components/site-menu.js";
 import Statistics from "./components/statistics.js";
 import TasksModel from "./models/tasks-model.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, remove} from "./utils/render.js";
 
 
 const AUTHORIZATION = `Basic fdHJdhfvhd=565Jfvf`;
@@ -29,13 +30,16 @@ const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 const siteMenuComponent = new SiteMenu();
 const statisticsComponent = new Statistics({tasksModel, dateFrom, dateTo});
 
+const loadingComponent = new Loading();
 const boardComponent = new Board();
 const boardController = new BoardController(boardComponent, tasksModel, api);
 const filterController = new FilterController(siteMainElement, tasksModel);
 
 render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
 filterController.render();
+filterController.switchOff();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
+render(boardComponent.getElement(), loadingComponent, RenderPosition.AFTERBEGIN);
 render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
 
@@ -68,5 +72,7 @@ siteMenuComponent.setOnChange((menuItem) => {
 api.getTasks()
   .then((tasks) => {
     tasksModel.setTasks(tasks);
+    filterController.switchOn();
+    remove(loadingComponent);
     boardController.render();
   });
