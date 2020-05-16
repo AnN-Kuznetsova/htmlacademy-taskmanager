@@ -32,6 +32,8 @@ export default class BoardController {
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onLoadMoreButtonClick = this._onLoadMoreButtonClick.bind(this);
 
+    this._noTasksDisplayChangeHandlers = [];
+
     this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
     this._tasksModel.setOnFilterChange(this._onFilterChange);
   }
@@ -105,6 +107,15 @@ export default class BoardController {
 
 
   _renderTaskList() {
+    const isAllTasksArchived = this._showingTasks.every((task) => task.isArchive);
+
+    if (isAllTasksArchived || !this._showingTasks.length) {
+      this._renderNoTasksDisplay();
+      return;
+    }
+
+    this._removeNoTasksDisplay();
+
     this._removeTasks();
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
     this._renderTasks(this._showingTasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
@@ -146,17 +157,31 @@ export default class BoardController {
     this._showingTasks = tasks.slice();
 
     const boardElement = this._boardComponent.getElement();
-    const isAllTasksArchived = this._showingTasks.every((task) => task.isArchive);
 
-    if (isAllTasksArchived) {
-      render(boardElement, this._noTasksComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-
-    render(boardElement, this._sortComponent, RenderPosition.BEFOREEND);
+    render(boardElement, this._sortComponent, RenderPosition.AFTERBEGIN);
     render(boardElement, this._tasksComponent, RenderPosition.BEFOREEND);
 
     this._renderTaskList();
+  }
+
+
+  _renderNoTasksDisplay() {
+    this._sortComponent.getElement().remove();
+    this._callNoTasksDisplayChangeHandlers(this._noTasksDisplayChangeHandlers, true);
+
+    render(this._boardComponent.getElement(), this._noTasksComponent, RenderPosition.AFTERBEGIN);
+  }
+
+
+  _removeNoTasksDisplay() {
+    const noTasksElement = this._noTasksComponent.getElement();
+
+    if (noTasksElement) {
+      noTasksElement.remove();
+    }
+
+    render(this._boardComponent.getElement(), this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._callNoTasksDisplayChangeHandlers(this._noTasksDisplayChangeHandlers, false);
   }
 
 
@@ -179,6 +204,11 @@ export default class BoardController {
   }
 
 
+  _callNoTasksDisplayChangeHandlers(handlers, displayMode) {
+    handlers.forEach((handler) => handler(displayMode));
+  }
+
+
   hide() {
     this._resetBoard();
     this._boardComponent.hide();
@@ -188,5 +218,10 @@ export default class BoardController {
   show() {
     this._resetBoard();
     this._boardComponent.show();
+  }
+
+
+  setNoTasksDisplayChangeHandlers(handler) {
+    this._noTasksDisplayChangeHandlers.push(handler);
   }
 }
