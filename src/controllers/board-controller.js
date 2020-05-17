@@ -128,8 +128,11 @@ export default class BoardController {
       if (newData === null) {
         this._updateTasks();
       } else {
-        this._tasksModel.addTask(newData);
-        this._updateTasks();
+        this._api.createTask(newData)
+          .then((taskModel) => {
+            this._tasksModel.addTask(taskModel);
+            this._updateTasks();
+          });
       }
     } else if (newData === null) {
       this._tasksModel.removeTask(oldData.id);

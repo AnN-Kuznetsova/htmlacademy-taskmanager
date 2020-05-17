@@ -10,7 +10,7 @@ import {render, RenderPosition, remove} from "./utils/render.js";
 
 
 const AUTHORIZATION = `Basic fdHJdhfvhd=565Jfvf`;
-const END_POINT = `https://11.ecmascript.pages.academy/task-manager1`;
+const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
 
 
 const dateTo = new Date();
