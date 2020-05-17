@@ -132,6 +132,9 @@ export default class BoardController {
           .then((taskModel) => {
             this._tasksModel.addTask(taskModel);
             this._updateTasks();
+          })
+          .catch(() => {
+            taskController.shake();
           });
       }
     } else if (newData === null) {
@@ -139,6 +142,9 @@ export default class BoardController {
         .then(() => {
           this._tasksModel.removeTask(oldData.id);
           this._updateTasks();
+        })
+        .catch(() => {
+          taskController.shake();
         });
     } else {
       this._api.updateTask(oldData.id, newData)
@@ -148,6 +154,9 @@ export default class BoardController {
           if (isSuccess) {
             taskController.render(taskModel, TaskControllerMode.DEFAULT);
           }
+        })
+        .catch(() => {
+          taskController.shake();
         });
     }
   }
