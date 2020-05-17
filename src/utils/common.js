@@ -36,6 +36,14 @@ const getEnumPropertyKey = (Enumeration, value) => {
   return propertyKey;
 };
 
+const disableForm = (formElement, value = true) => {
+  const formElements = formElement.elements;
+
+  for (const element of formElements) {
+    element.disabled = value;
+  }
+};
+
 
 export {
   formatDate,
@@ -44,4 +52,5 @@ export {
   isOverdueDate,
   isOneDay,
   getEnumPropertyKey,
+  disableForm,
 };

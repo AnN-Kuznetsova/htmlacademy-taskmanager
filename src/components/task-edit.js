@@ -1,6 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {MIN_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH, DAYS, COLORS} from "../const.js";
-import {formatDate, formatTime, isRepeating, isOverdueDate} from "../utils/common.js";
+import {disableForm, formatDate, formatTime, isRepeating, isOverdueDate} from "../utils/common.js";
 import flatpickr from "flatpickr";
 import {encode} from "he";
 
@@ -287,6 +287,11 @@ export default class TaskEdit extends AbstractSmartComponent {
   setData(data) {
     this._externalData = Object.assign({}, DefaultData, data);
     this.rerender();
+  }
+
+
+  disableCardForm(value = true) {
+    disableForm(this.getElement().querySelector(`.card__form`), value);
   }
 
 

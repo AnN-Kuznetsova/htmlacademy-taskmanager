@@ -133,6 +133,7 @@ export default class TaskController {
     });
 
     this._onDataChange(this, this._task, data);
+    this._taskEditComponent.disableCardForm();
   }
 
 
@@ -142,6 +143,7 @@ export default class TaskController {
     });
 
     this._onDataChange(this, this._task, null);
+    this._taskEditComponent.disableCardForm();
   }
 
 
