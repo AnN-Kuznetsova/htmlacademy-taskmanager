@@ -128,11 +128,19 @@ export default class TaskController {
     const formData = this._taskEditComponent.getData();
     const data = this._parseFormData(formData);
 
+    this._taskEditComponent.setData({
+      saveButtonText: `Saving...`,
+    });
+
     this._onDataChange(this, this._task, data);
   }
 
 
   _onDeleteButtonClick() {
+    this._taskEditComponent.setData({
+      deleteButtonText: `Deleting...`,
+    });
+
     this._onDataChange(this, this._task, null);
   }
 
@@ -196,6 +204,11 @@ export default class TaskController {
     setTimeout(() => {
       this._taskEditComponent.getElement().style.animation = ``;
       this._taskComponent.getElement().style.animation = ``;
+
+      this._taskEditComponent.setData({
+        saveButtonText: `Save`,
+        deleteButtonText: `Delete`,
+      });
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 }
