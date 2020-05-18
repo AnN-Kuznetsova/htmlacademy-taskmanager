@@ -10,14 +10,42 @@ export default class FilterController {
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
+    this._filterElements = [];
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onTasksModelFilterChange = this._onTasksModelFilterChange.bind(this);
+    this.renderDisabled = this.renderDisabled.bind(this);
 
     this._tasksModel.setOnDataChange(this._onDataChange);
     this._tasksModel.setOnFilterChange(this._onTasksModelFilterChange);
   }
+
+
+  _switchOff() {
+    this._filterElements = this._filterComponent.getElement()
+      .querySelectorAll(`.filter__input`);
+
+    for (const filterElement of this._filterElements) {
+      filterElement.disabled = true;
+    }
+  }
+
+  _switchOn() {
+    for (const filterElement of this._filterElements) {
+      filterElement.disabled = false;
+    }
+  }
+
+  renderDisabled(disabledMode = false) {
+    if (disabledMode) {
+      this._switchOff();
+      return;
+    }
+
+    this._switchOn();
+  }
+
 
   render() {
     const container = this._container;

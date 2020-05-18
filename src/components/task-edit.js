@@ -1,10 +1,16 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {MIN_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH, DAYS, COLORS} from "../const.js";
-import {formatDate, formatTime, isRepeating, isOverdueDate} from "../utils/common.js";
+import {adjustErrorStyle, disableForm, formatDate, formatTime, isRepeating, isOverdueDate} from "../utils/common.js";
 import flatpickr from "flatpickr";
 import {encode} from "he";
 
 import "flatpickr/dist/flatpickr.min.css";
+
+
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
+};
 
 
 export default class TaskEdit extends AbstractSmartComponent {
@@ -20,12 +26,16 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
+    this._externalData = DefaultData;
+
     this._flatpickr = null;
     this._submitCallback = null;
     this._deleteButtonClickCallback = null;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
+
+    this.setErrorStyle = this.setErrorStyle.bind(this);
   }
 
 
@@ -166,8 +176,8 @@ export default class TaskEdit extends AbstractSmartComponent {
 
 
   getTemplate() {
-    const [color, currentDescription, dueDate, isDateShowing, isRepeatingTask, activeRepeatingDays] =
-      [this._color, this._description, this._dueDate, this._isDateShowing, this._isRepeatingTask, this._activeRepeatingDays];
+    const [color, currentDescription, dueDate, isDateShowing, isRepeatingTask, activeRepeatingDays, externalData] =
+      [this._color, this._description, this._dueDate, this._isDateShowing, this._isRepeatingTask, this._activeRepeatingDays, this._externalData];
 
     const description = encode(currentDescription);
 
@@ -185,6 +195,9 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     const repeatingDaysMarkup = this._createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
     const colorsMarkup = this._createColorsMarkup(COLORS, color);
+
+    const deleteButtonText = externalData.deleteButtonText;
+    const saveButtonText = externalData.saveButtonText;
 
     return (
       `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -246,8 +259,8 @@ export default class TaskEdit extends AbstractSmartComponent {
             </div>
 
             <div class="card__status-btns">
-              <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
-              <button class="card__delete" type="button">delete</button>
+              <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>${saveButtonText}</button>
+              <button class="card__delete" type="button">${deleteButtonText}</button>
             </div>
           </div>
         </form>
@@ -273,12 +286,24 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
 
 
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
+  }
+
+
+  disableCardForm(value = true) {
+    disableForm(this.getElement().querySelector(`.card__form`), value);
+  }
+
+
   setOnEditFormSubmit(cb) {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, cb);
 
     this._submitCallback = cb;
   }
+
 
   setOnDeleteButtonClick(cb) {
     this.getElement().querySelector(`.card__delete`)
@@ -312,5 +337,11 @@ export default class TaskEdit extends AbstractSmartComponent {
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
     return new FormData(form);
+  }
+
+
+  setErrorStyle(isError = true) {
+    const cardInnerElement = this.getElement().querySelector(`.card__inner`);
+    adjustErrorStyle(cardInnerElement, isError);
   }
 }

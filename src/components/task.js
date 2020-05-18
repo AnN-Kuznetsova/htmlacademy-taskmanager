@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatDate, formatTime, isOverdueDate} from "../utils/common.js";
+import {adjustErrorStyle, formatDate, formatTime, isOverdueDate} from "../utils/common.js";
 import {encode} from "he";
 
 export default class Task extends AbstractComponent {
@@ -7,6 +7,8 @@ export default class Task extends AbstractComponent {
     super();
 
     this._task = task;
+
+    this.setErrorStyle = this.setErrorStyle.bind(this);
   }
 
 
@@ -92,5 +94,11 @@ export default class Task extends AbstractComponent {
   setOnFavoritesButtonClick(cb) {
     this.getElement().querySelector(`.card__btn--favorites`)
       .addEventListener(`click`, cb);
+  }
+
+
+  setErrorStyle(isError = true) {
+    const cardInnerElement = this.getElement().querySelector(`.card__inner`);
+    adjustErrorStyle(cardInnerElement, isError);
   }
 }
