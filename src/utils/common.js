@@ -44,6 +44,10 @@ const disableForm = (formElement, value = true) => {
   }
 };
 
+const adjustErrorStyle = (element, isError = true) => {
+  element.style.outline = isError ? `3px solid #ff4e4e` : ``;
+};
+
 
 export {
   formatDate,
@@ -53,4 +57,5 @@ export {
   isOneDay,
   getEnumPropertyKey,
   disableForm,
+  adjustErrorStyle,
 };

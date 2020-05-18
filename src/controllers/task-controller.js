@@ -199,13 +199,28 @@ export default class TaskController {
   }
 
 
+  setErrorStyle(isError = true) {
+    if (isError) {
+      this._taskComponent.setErrorStyle();
+      this._taskEditComponent.setErrorStyle();
+    } else {
+      this._taskComponent.setErrorStyle(false);
+      this._taskEditComponent.setErrorStyle(false);
+    }
+  }
+
+
   shake() {
+    this.setErrorStyle();
+
     this._taskEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     this._taskComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
 
     setTimeout(() => {
       this._taskEditComponent.getElement().style.animation = ``;
       this._taskComponent.getElement().style.animation = ``;
+
+      this.setErrorStyle(false);
 
       this._taskEditComponent.setData({
         saveButtonText: `Save`,
