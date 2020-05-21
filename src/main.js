@@ -13,6 +13,9 @@ import {render, RenderPosition, remove} from "./utils/render.js";
 
 const AUTHORIZATION = `Basic fdHJdhfvhd=565Jfvf`;
 const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
+const STORE_PREFIX = `taskmanager-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 
 const dateTo = new Date();
@@ -24,7 +27,7 @@ const dateFrom = (() => {
 
 
 const api = new API(END_POINT, AUTHORIZATION);
-const store = new Store();
+const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const tasksModel = new TasksModel();
 

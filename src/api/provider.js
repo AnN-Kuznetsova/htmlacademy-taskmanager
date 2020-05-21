@@ -1,4 +1,4 @@
-import Task from "../models/task";
+import TaskModel from "../models/task-model.js";
 import {isOnline} from "../utils/common.js";
 
 
@@ -21,7 +21,7 @@ export default class Provider {
 
     const storeTasks = Object.values(this._store.getItems());
 
-    return Promise.resolve(Task.parseTasks(storeTasks));
+    return Promise.resolve(TaskModel.parseTasks(storeTasks));
   }
 
 
