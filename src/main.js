@@ -1,4 +1,4 @@
-import API from "./api.js";
+import API from "./api/index.js";
 import Board from "./components/board.js";
 import BoardController from "./controllers/board-controller.js";
 import FilterController from "./controllers/filter-controller.js";

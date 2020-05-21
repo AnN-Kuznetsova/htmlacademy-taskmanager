@@ -1,4 +1,4 @@
-import TaskModel from "./models/task-model.js";
+import TaskModel from "../models/task-model.js";
 
 
 const Method = {
