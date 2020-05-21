@@ -6,6 +6,7 @@ import Loading from "./components/loading.js";
 import Provider from "./api/provider.js";
 import SiteMenu, {MenuItem} from "./components/site-menu.js";
 import Statistics from "./components/statistics.js";
+import Store from "./api/store.js";
 import TasksModel from "./models/tasks-model.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
 
@@ -23,7 +24,8 @@ const dateFrom = (() => {
 
 
 const api = new API(END_POINT, AUTHORIZATION);
-const apiWithProvider = new Provider(api);
+const store = new Store();
+const apiWithProvider = new Provider(api, store);
 const tasksModel = new TasksModel();
 
 
