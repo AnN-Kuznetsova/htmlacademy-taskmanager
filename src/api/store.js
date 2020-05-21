@@ -13,6 +13,15 @@ export default class Store {
     }
   }
 
+
+  setItems(items) {
+    this._storage.setItem(
+        this._storeKey,
+        JSON.stringify(items)
+    );
+  }
+
+
   setItem(key, value) {
     const store = this.getItems();
 
@@ -26,6 +35,7 @@ export default class Store {
         )
     );
   }
+
 
   removeItem(key) {
     const store = this.getItems();
