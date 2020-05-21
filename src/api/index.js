@@ -1,4 +1,4 @@
-import TaskModel from "./models/task-model.js";
+import TaskModel from "../models/task-model.js";
 
 
 const Method = {
@@ -69,5 +69,16 @@ export default class API {
 
   deleteTask(id) {
     return this._load({url: `tasks/${id}`, method: Method.DELETE});
+  }
+
+
+  sync(data) {
+    return this._load({
+      url: `tasks/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 }

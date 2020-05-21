@@ -48,6 +48,10 @@ const adjustErrorStyle = (element, isError = true) => {
   element.style.outline = isError ? `3px solid #ff4e4e` : ``;
 };
 
+const isOnline = () => {
+  return window.navigator.onLine;
+};
+
 
 export {
   formatDate,
@@ -58,4 +62,5 @@ export {
   getEnumPropertyKey,
   disableForm,
   adjustErrorStyle,
+  isOnline,
 };

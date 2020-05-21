@@ -1,16 +1,21 @@
-import API from "./api.js";
+import API from "./api/index.js";
 import Board from "./components/board.js";
 import BoardController from "./controllers/board-controller.js";
 import FilterController from "./controllers/filter-controller.js";
 import Loading from "./components/loading.js";
+import Provider from "./api/provider.js";
 import SiteMenu, {MenuItem} from "./components/site-menu.js";
 import Statistics from "./components/statistics.js";
+import Store from "./api/store.js";
 import TasksModel from "./models/tasks-model.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
 
 
 const AUTHORIZATION = `Basic fdHJdhfvhd=565Jfvf`;
 const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
+const STORE_PREFIX = `taskmanager-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 
 const dateTo = new Date();
@@ -22,6 +27,8 @@ const dateFrom = (() => {
 
 
 const api = new API(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 const tasksModel = new TasksModel();
 
 
@@ -32,7 +39,7 @@ const statisticsComponent = new Statistics({tasksModel, dateFrom, dateTo});
 
 const loadingComponent = new Loading();
 const boardComponent = new Board();
-const boardController = new BoardController(boardComponent, tasksModel, api);
+const boardController = new BoardController(boardComponent, tasksModel, apiWithProvider);
 const filterController = new FilterController(siteMainElement, tasksModel);
 
 render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
@@ -72,7 +79,7 @@ siteMenuComponent.setOnChange((menuItem) => {
 });
 
 
-api.getTasks()
+apiWithProvider.getTasks()
   .then((tasks) => {
     tasksModel.setTasks(tasks);
   })
@@ -83,3 +90,26 @@ api.getTasks()
     remove(loadingComponent);
     boardController.render();
   });
+
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then((reg) => {
+      // Действие, в случае успешной регистрации ServiceWorker
+      window.console.log(`Registration succeeded. Scope is ` + reg.scope);
+    }).catch((error) => {
+      // Действие, в случае ошибки при регистрации ServiceWorker
+      window.console.log(`Registration failed with ` + error);
+    });
+});
+
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
