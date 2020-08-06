@@ -3,7 +3,7 @@
 * Студент: [Анна Кузнецова](https://up.htmlacademy.ru/ecmascript/11/user/993327).
 * Наставник: `Неизвестно`.
 
----
+-----
 
 _Не удаляйте и не изменяйте папки и файлы:_
 _`.editorconfig`, `.gitattributes`, `.travis.yml`._
